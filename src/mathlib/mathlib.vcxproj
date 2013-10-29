@@ -57,7 +57,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\common;..\public;..\public\tier0;..\public\tier1;..\public\mathlib</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>VPC;RAD_TELEMETRY_DISABLED;_HAS_ITERATOR_DEBUGGING=0;WIN32;_WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;COMPILER_MSVC32;COMPILER_MSVC32;COMPILER_MSVC;_DLL_EXT=.dll;LIBNAME=mathlib;BINK_VIDEO;AVI_VIDEO;WMV_VIDEO;DEV_BUILD;FRAME_POINTER_OMISSION_DISABLED;MATHLIB_LIB;VPCGAMECAPS=HL2MP;PROJECTDIR=C:\Users\David\Games\SourceMods\TheHunted\src\mathlib;_DLL_EXT=.dll;SOURCE1=1;VPCGAME=hl2mp</PreprocessorDefinitions>
+      <PreprocessorDefinitions>VPC;RAD_TELEMETRY_DISABLED;_HAS_ITERATOR_DEBUGGING=0;WIN32;_WIN32;_DEBUG;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;COMPILER_MSVC32;COMPILER_MSVC32;COMPILER_MSVC;_DLL_EXT=.dll;LIBNAME=mathlib;BINK_VIDEO;AVI_VIDEO;WMV_VIDEO;DEV_BUILD;FRAME_POINTER_OMISSION_DISABLED;MATHLIB_LIB;VPCGAMECAPS=HL2MP;PROJECTDIR=C:\Users\David\Games\SourceMods\Juggernaut\src\mathlib;_DLL_EXT=.dll;SOURCE1=1;VPCGAME=hl2mp</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -115,7 +115,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\common;..\public;..\public\tier0;..\public\tier1;..\public\mathlib</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>VPC;RAD_TELEMETRY_DISABLED;WIN32;_WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;COMPILER_MSVC32;COMPILER_MSVC32;COMPILER_MSVC;_DLL_EXT=.dll;LIBNAME=mathlib;BINK_VIDEO;AVI_VIDEO;WMV_VIDEO;DEV_BUILD;FRAME_POINTER_OMISSION_DISABLED;MATHLIB_LIB;VPCGAMECAPS=HL2MP;PROJECTDIR=C:\Users\David\Games\SourceMods\TheHunted\src\mathlib;_DLL_EXT=.dll;SOURCE1=1;VPCGAME=hl2mp</PreprocessorDefinitions>
+      <PreprocessorDefinitions>VPC;RAD_TELEMETRY_DISABLED;WIN32;_WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;COMPILER_MSVC32;COMPILER_MSVC32;COMPILER_MSVC;_DLL_EXT=.dll;LIBNAME=mathlib;BINK_VIDEO;AVI_VIDEO;WMV_VIDEO;DEV_BUILD;FRAME_POINTER_OMISSION_DISABLED;MATHLIB_LIB;VPCGAMECAPS=HL2MP;PROJECTDIR=C:\Users\David\Games\SourceMods\Juggernaut\src\mathlib;_DLL_EXT=.dll;SOURCE1=1;VPCGAME=hl2mp</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -221,11 +221,11 @@
   <ItemGroup>
     <CustomBuild Include="mathlib.vpc">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running VPC CRC Check - mathlib.vpc</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if exist $SRCDIR\devtools\bin\vpc.exe $SRCDIR\devtools\bin\vpc.exe -crc2 mathlib.vcxproj&#x0D;&#x0A;if ERRORLEVEL 1 exit 1&#x0D;&#x0A;echo crc_complete &gt; C:\Users\David\Games\SourceMods\TheHunted\src\mathlib\mathlib.vpc.sentinel</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\David\Games\SourceMods\TheHunted\src\mathlib\mathlib.vpc.sentinel</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if exist $SRCDIR\devtools\bin\vpc.exe $SRCDIR\devtools\bin\vpc.exe -crc2 mathlib.vcxproj&#x0D;&#x0A;if ERRORLEVEL 1 exit 1&#x0D;&#x0A;echo crc_complete &gt; C:\Users\David\Games\SourceMods\Juggernaut\src\mathlib\mathlib.vpc.sentinel</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\David\Games\SourceMods\Juggernaut\src\mathlib\mathlib.vpc.sentinel</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running VPC CRC Check - mathlib.vpc</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if exist $SRCDIR\devtools\bin\vpc.exe $SRCDIR\devtools\bin\vpc.exe -crc2 mathlib.vcxproj&#x0D;&#x0A;if ERRORLEVEL 1 exit 1&#x0D;&#x0A;echo crc_complete &gt; C:\Users\David\Games\SourceMods\TheHunted\src\mathlib\mathlib.vpc.sentinel</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\David\Games\SourceMods\TheHunted\src\mathlib\mathlib.vpc.sentinel</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if exist $SRCDIR\devtools\bin\vpc.exe $SRCDIR\devtools\bin\vpc.exe -crc2 mathlib.vcxproj&#x0D;&#x0A;if ERRORLEVEL 1 exit 1&#x0D;&#x0A;echo crc_complete &gt; C:\Users\David\Games\SourceMods\Juggernaut\src\mathlib\mathlib.vpc.sentinel</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\David\Games\SourceMods\Juggernaut\src\mathlib\mathlib.vpc.sentinel</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

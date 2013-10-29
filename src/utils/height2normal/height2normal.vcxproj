@@ -61,7 +61,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\common</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_HAS_ITERATOR_DEBUGGING=0;_DEBUG;_WIN32;_CONSOLE;VPCGAMECAPS=HL2MP;PROJECTDIR=C:\Users\David\Games\SourceMods\TheHunted\src\utils\height2normal;_DLL_EXT=.dll;VPCGAME=hl2mp;SOURCE1=1</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_ITERATOR_DEBUGGING=0;_DEBUG;_WIN32;_CONSOLE;VPCGAMECAPS=HL2MP;PROJECTDIR=C:\Users\David\Games\SourceMods\Juggernaut\src\utils\height2normal;_DLL_EXT=.dll;VPCGAME=hl2mp;SOURCE1=1</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -137,7 +137,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\..\common;..\..\public;..\..\public\tier0;..\..\public\tier1;..\common</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_HAS_ITERATOR_DEBUGGING=0;_DEBUG;_WIN32;_CONSOLE;VPCGAMECAPS=HL2MP;PROJECTDIR=C:\Users\David\Games\SourceMods\TheHunted\src\utils\height2normal;_DLL_EXT=.dll;VPCGAME=hl2mp;SOURCE1=1</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_ITERATOR_DEBUGGING=0;_DEBUG;_WIN32;_CONSOLE;VPCGAMECAPS=HL2MP;PROJECTDIR=C:\Users\David\Games\SourceMods\Juggernaut\src\utils\height2normal;_DLL_EXT=.dll;VPCGAME=hl2mp;SOURCE1=1</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -223,11 +223,11 @@
   <ItemGroup>
     <CustomBuild Include="height2normal.vpc">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running VPC CRC Check - height2normal.vpc</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if exist $SRCDIR\devtools\bin\vpc.exe $SRCDIR\devtools\bin\vpc.exe -crc2 height2normal.vcxproj&#x0D;&#x0A;if ERRORLEVEL 1 exit 1&#x0D;&#x0A;echo crc_complete &gt; C:\Users\David\Games\SourceMods\TheHunted\src\utils\height2normal\height2normal.vpc.sentinel</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\David\Games\SourceMods\TheHunted\src\utils\height2normal\height2normal.vpc.sentinel</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if exist $SRCDIR\devtools\bin\vpc.exe $SRCDIR\devtools\bin\vpc.exe -crc2 height2normal.vcxproj&#x0D;&#x0A;if ERRORLEVEL 1 exit 1&#x0D;&#x0A;echo crc_complete &gt; C:\Users\David\Games\SourceMods\Juggernaut\src\utils\height2normal\height2normal.vpc.sentinel</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\David\Games\SourceMods\Juggernaut\src\utils\height2normal\height2normal.vpc.sentinel</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running VPC CRC Check - height2normal.vpc</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if exist $SRCDIR\devtools\bin\vpc.exe $SRCDIR\devtools\bin\vpc.exe -crc2 height2normal.vcxproj&#x0D;&#x0A;if ERRORLEVEL 1 exit 1&#x0D;&#x0A;echo crc_complete &gt; C:\Users\David\Games\SourceMods\TheHunted\src\utils\height2normal\height2normal.vpc.sentinel</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\David\Games\SourceMods\TheHunted\src\utils\height2normal\height2normal.vpc.sentinel</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if exist $SRCDIR\devtools\bin\vpc.exe $SRCDIR\devtools\bin\vpc.exe -crc2 height2normal.vcxproj&#x0D;&#x0A;if ERRORLEVEL 1 exit 1&#x0D;&#x0A;echo crc_complete &gt; C:\Users\David\Games\SourceMods\Juggernaut\src\utils\height2normal\height2normal.vpc.sentinel</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\David\Games\SourceMods\Juggernaut\src\utils\height2normal\height2normal.vpc.sentinel</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
