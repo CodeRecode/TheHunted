@@ -10,13 +10,13 @@ WeaponData
 	"bucket"			"1"
 	"bucket_position"	"0"
 
-	"clip_size"			"18"
+	"clip_size"			"12"
 	"primary_ammo"		"Pistol"
 	"secondary_ammo"	"None"
 
 	"weight"			"2"
 	"item_flags"			"0"
-	"damage"			"8"
+	"damage"			"12"
 
 	// Sounds for the weapon. There is a max of 16 sounds per category (i.e. max 16 "single_shot" sounds)
 	SoundData

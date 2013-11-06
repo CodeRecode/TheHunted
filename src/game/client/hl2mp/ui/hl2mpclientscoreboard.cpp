@@ -30,8 +30,8 @@ using namespace vgui;
 // id's of sections used in the scoreboard
 enum EScoreboardSections
 {
-	SCORESECTION_COMBINE = 1,
-	SCORESECTION_REBELS = 2,
+	SCORESECTION_MUTANT = 1,
+	SCORESECTION_SWAT = 2,
 	SCORESECTION_FREEFORALL = 3,
 	SCORESECTION_SPECTATOR = 4
 };
@@ -335,8 +335,8 @@ void CHL2MPClientScoreBoardDialog::InitScoreboardSections()
 	if ( HL2MPRules()->IsTeamplay() )
 	{
 		// add the team sections
-		AddSection( TYPE_TEAM, TEAM_COMBINE );
-		AddSection( TYPE_TEAM, TEAM_REBELS );
+		AddSection( TYPE_TEAM, TEAM_MUTANT );
+		AddSection( TYPE_TEAM, TEAM_SWAT );
 	}
 	else
 	{
@@ -497,10 +497,10 @@ int CHL2MPClientScoreBoardDialog::GetSectionFromTeamNumber( int teamNumber )
 {
 	switch ( teamNumber )
 	{
-	case TEAM_COMBINE:
-		return SCORESECTION_COMBINE;
-	case TEAM_REBELS:
-		return SCORESECTION_REBELS;
+	case TEAM_MUTANT:
+		return SCORESECTION_MUTANT;
+	case TEAM_SWAT:
+		return SCORESECTION_SWAT;
 	case TEAM_SPECTATOR:
 		return SCORESECTION_SPECTATOR;
 	default:

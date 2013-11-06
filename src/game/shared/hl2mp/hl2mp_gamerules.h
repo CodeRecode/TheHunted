@@ -28,8 +28,8 @@
 
 enum
 {
-	TEAM_COMBINE = 2,
-	TEAM_REBELS,
+	TEAM_MUTANT = 2,
+	TEAM_SWAT,
 };
 
 

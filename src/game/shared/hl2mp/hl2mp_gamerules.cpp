@@ -47,8 +47,8 @@ ConVar sv_report_client_settings("sv_report_client_settings", "0", FCVAR_GAMEDLL
 
 extern ConVar mp_chattime;
 
-extern CBaseEntity	 *g_pLastCombineSpawn;
-extern CBaseEntity	 *g_pLastRebelSpawn;
+extern CBaseEntity	 *g_pLastMutantSpawn;
+extern CBaseEntity	 *g_pLastSWATSpawn;
 
 #define WEAPON_MAX_DISTANCE_FROM_SPAWN 64
 
@@ -179,8 +179,8 @@ char *sTeamNames[] =
 {
 	"Unassigned",
 	"Spectator",
-	"Combine",
-	"Rebels",
+	"Mutant",
+	"SWAT",
 };
 
 CHL2MPRules::CHL2MPRules()
@@ -195,7 +195,7 @@ CHL2MPRules::CHL2MPRules()
 		g_Teams.AddToTail( pTeam );
 	}
 
-	m_bTeamPlayEnabled = teamplay.GetBool();
+	m_bTeamPlayEnabled = true;
 	m_flIntermissionEndTime = 0.0f;
 	m_flGameStartTime = 0;
 
@@ -237,8 +237,8 @@ void CHL2MPRules::CreateStandardEntities( void )
 
 	BaseClass::CreateStandardEntities();
 
-	g_pLastCombineSpawn = NULL;
-	g_pLastRebelSpawn = NULL;
+	g_pLastMutantSpawn = NULL;
+	g_pLastSWATSpawn = NULL;
 
 #ifdef DBGFLAG_ASSERT
 	CBaseEntity *pEnt = 
@@ -325,10 +325,10 @@ void CHL2MPRules::Think( void )
 	{
 		if( IsTeamplay() == true )
 		{
-			CTeam *pCombine = g_Teams[TEAM_COMBINE];
-			CTeam *pRebels = g_Teams[TEAM_REBELS];
+			CTeam *pMutants = g_Teams[TEAM_MUTANT];
+			CTeam *pSWAT = g_Teams[TEAM_SWAT];
 
-			if ( pCombine->GetScore() >= flFragLimit || pRebels->GetScore() >= flFragLimit )
+			if ( pMutants->GetScore() >= flFragLimit || pSWAT->GetScore() >= flFragLimit )
 			{
 				GoToIntermission();
 				return;
@@ -801,11 +801,11 @@ void CHL2MPRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 		{
 			if ( Q_stristr( szModelName, "models/human") )
 			{
-				pHL2Player->ChangeTeam( TEAM_REBELS );
+				pHL2Player->ChangeTeam( TEAM_SWAT );
 			}
 			else
 			{
-				pHL2Player->ChangeTeam( TEAM_COMBINE );
+				pHL2Player->ChangeTeam( TEAM_MUTANT );
 			}
 		}
 	}
@@ -959,7 +959,7 @@ CAmmoDef *GetAmmoDef()
 		int count = 1;
 		count = clamp( count, 1, 16 );
 
-		int iTeam = TEAM_COMBINE;
+		int iTeam = TEAM_MUTANT;
 				
 		// Look at -frozen.
 		bool bFrozen = false;
@@ -1030,17 +1030,17 @@ void CHL2MPRules::RestartGame()
 
 	// Respawn entities (glass, doors, etc..)
 
-	CTeam *pRebels = GetGlobalTeam( TEAM_REBELS );
-	CTeam *pCombine = GetGlobalTeam( TEAM_COMBINE );
+	CTeam *pSWAT = GetGlobalTeam( TEAM_SWAT );
+	CTeam *pMutants = GetGlobalTeam( TEAM_MUTANT );
 
-	if ( pRebels )
+	if ( pSWAT )
 	{
-		pRebels->SetScore( 0 );
+		pSWAT->SetScore( 0 );
 	}
 
-	if ( pCombine )
+	if ( pMutants )
 	{
-		pCombine->SetScore( 0 );
+		pMutants->SetScore( 0 );
 	}
 
 	m_flIntermissionEndTime = 0;
