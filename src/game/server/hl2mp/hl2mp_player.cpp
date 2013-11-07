@@ -296,6 +296,15 @@ void CHL2MP_Player::Spawn(void)
 	SetPlayerUnderwater(false);
 
 	m_bReady = false;
+
+	if ( GetTeamNumber() != TEAM_SPECTATOR )
+	{
+		StopObserverMode();
+	}
+	else
+	{
+		StartObserverMode( OBS_MODE_FIXED );
+	}
 }
 
 void CHL2MP_Player::PickupObject( CBaseEntity *pObject, bool bLimitMassAndSize )
@@ -864,6 +873,19 @@ void CHL2MP_Player::ChangeTeam( int iTeam )
 		return;
 	}*/
 
+	if ( iTeam == TEAM_SPECTATOR )
+	{
+		if ( GetTeamNumber() != TEAM_UNASSIGNED && !IsDead() )
+		{
+			m_fNextSuicideTime = gpGlobals->curtime;	// allow the suicide to work
+
+			CommitSuicide();
+
+			// add 1 to frags to balance out the 1 subtracted for killing yourself
+			IncrementFragCount( 1 );
+		}
+	}
+
 	bool bKill = false;
 
 	if ( HL2MPRules()->IsTeamplay() != true && iTeam != TEAM_SPECTATOR )
@@ -896,13 +918,18 @@ void CHL2MP_Player::ChangeTeam( int iTeam )
 	if ( iTeam == TEAM_SPECTATOR )
 	{
 		RemoveAllItems( true );
-
+		StartObserverMode( OBS_MODE_FIXED );
 		State_Transition( STATE_OBSERVER_MODE );
 	}
-
-	if ( bKill == true )
+	else
 	{
-		CommitSuicide();
+		StopObserverMode();
+		State_Transition(STATE_ACTIVE);
+
+		if ( bKill == true )
+		{
+			CommitSuicide();
+		}
 	}
 }
 
@@ -933,25 +960,6 @@ bool CHL2MP_Player::HandleCommand_JoinTeam( int team )
 			ClientPrint( this, HUD_PRINTCENTER, "#Cannot_Be_Spectator" );
 			return false;
 		}
-
-		if ( GetTeamNumber() != TEAM_UNASSIGNED && !IsDead() )
-		{
-			m_fNextSuicideTime = gpGlobals->curtime;	// allow the suicide to work
-
-			CommitSuicide();
-
-			// add 1 to frags to balance out the 1 subtracted for killing yourself
-			IncrementFragCount( 1 );
-		}
-
-		ChangeTeam( TEAM_SPECTATOR );
-
-		return true;
-	}
-	else
-	{
-		StopObserverMode();
-		State_Transition(STATE_ACTIVE);
 	}
 
 	// Switch their actual team...
