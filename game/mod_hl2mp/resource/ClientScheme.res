@@ -20,7 +20,7 @@ Scheme
 		"LightOrange"		"188 112 0 128"
 		
 		"Red"				"192 28 0 140"
-		"Black"				"0 0 0 196"
+		"Black"				"0 0 0 255"
 		"TransparentBlack"	"0 0 0 196"
 		"TransparentLightBlack"	"0 0 0 90"
 
@@ -105,8 +105,8 @@ Scheme
 		ComboBoxButton.BgColor			"TransparentBlack"
 		ComboBoxButton.DisabledBgColor	"Blank"
 
-		Frame.BgColor					"TransparentBlack"
-		Frame.OutOfFocusBgColor			"TransparentBlack"
+		Frame.BgColor					"Black"
+		Frame.OutOfFocusBgColor			"Black"
 		Frame.FocusTransitionEffectTime	"0.0"	// time it takes for a window to fade in/out on focus/out of focus
 		Frame.TransitionEffectTime		"0.0"	// time it takes for a window to fade in/out on open/close
 		Frame.AutoSnapRange				"0"
@@ -144,7 +144,7 @@ Scheme
 		ListPanel.EmptyListInfoTextColor	"Orange"
 
 		Menu.TextColor					"Orange"
-		Menu.BgColor					"TransparentBlack"
+		Menu.BgColor					"Black"
 		Menu.ArmedTextColor				"Orange"
 		Menu.ArmedBgColor				"Red"
 		Menu.TextInset					"6"
