@@ -35,6 +35,7 @@
 #include "clientscoreboarddialog.h"
 #include "spectatorgui.h"
 #include "teammenu.h"
+#include "classmenu.h"
 #include "vguitextwindow.h"
 #include "IGameUIFuncs.h"
 #include "mapoverview.h"
@@ -96,6 +97,13 @@ CON_COMMAND( chooseteam, "Opens a menu for teamchoose" )
  if ( !gViewPortInterface )
   return;
  gViewPortInterface->ShowPanel( "team", true );
+}
+
+CON_COMMAND( chooseloadout, "Opens a menu for class/loadout selection" )
+{
+ if ( !gViewPortInterface )
+  return;
+ gViewPortInterface->ShowPanel( "class", true );
 }
 
 /* global helper functions
@@ -239,7 +247,7 @@ void CBaseViewport::CreateDefaultPanels( void )
 	AddNewPanel( CreatePanelByName( PANEL_SPECMENU ), "PANEL_SPECMENU" );
 	AddNewPanel( CreatePanelByName( PANEL_NAV_PROGRESS ), "PANEL_NAV_PROGRESS" );
 	AddNewPanel( CreatePanelByName( PANEL_TEAM ), "PANEL_TEAM" );
-	// AddNewPanel( CreatePanelByName( PANEL_CLASS ), "PANEL_CLASS" );
+	AddNewPanel( CreatePanelByName( PANEL_CLASS ), "PANEL_CLASS" );
 	// AddNewPanel( CreatePanelByName( PANEL_BUY ), "PANEL_BUY" );
 #endif
 }
@@ -277,6 +285,10 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 		newpanel = new CMapOverview( this );
 	}
 	*/
+	else if ( Q_strcmp(PANEL_CLASS, szPanelName) == 0 )
+	{
+		newpanel = new CClassMenu( this );
+	}
 	else if ( Q_strcmp(PANEL_TEAM, szPanelName) == 0 )
 	{
 		newpanel = new CTeamMenu( this );

@@ -27,7 +27,7 @@ IMPLEMENT_CLIENTCLASS_DT(C_HL2MP_Player, DT_HL2MP_Player, CHL2MP_Player)
 	RecvPropFloat( RECVINFO( m_angEyeAngles[1] ) ),
 	RecvPropEHandle( RECVINFO( m_hRagdoll ) ),
 	RecvPropInt( RECVINFO( m_iSpawnInterpCounter ) ),
-	RecvPropInt( RECVINFO( m_iPlayerSoundType) ),
+	RecvPropInt( RECVINFO( m_iPlayerSoundType ) ),
 
 	RecvPropBool( RECVINFO( m_fIsWalking ) ),
 END_RECV_TABLE()

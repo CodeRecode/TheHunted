@@ -20,6 +20,7 @@
 #include "grenade_satchel.h"
 #include "eventqueue.h"
 #include "gamestats.h"
+#include "viewport_panel_names.h"
 
 #include "engine/IEngineSound.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
@@ -194,27 +195,56 @@ void CHL2MP_Player::GiveAllItems( void )
 	
 }
 
-void CHL2MP_Player::GiveDefaultItems( void )
-{
-	EquipSuit();
+void CHL2MP_Player::GiveLoadoutItems( void )
+{	
+	int primary = (int)(m_iLoadout / 100),
+		secondary = (int)((m_iLoadout % 100) / 10),
+		equipment = (int)(m_iLoadout % 10);
 
-	CBasePlayer::GiveAmmo( 255,	"Pistol");
-	CBasePlayer::GiveAmmo( 45,	"SMG1");
+	if ( GetTeamNumber() == TEAM_SWAT ) 
+	{
+		if ( primary == 1 ) 
+		{
+			GiveNamedItem( "weapon_smg1" );
+			CBasePlayer::GiveAmmo( 90,	"SMG1" );
+		}
+		else if ( primary == 2 ) 
+		{
+			GiveNamedItem( "weapon_ar2" );
+			CBasePlayer::GiveAmmo( 60,	"AR2" );
+		}
+		else if ( primary == 3 )
+		{
+			GiveNamedItem( "weapon_shotgun" );
+			CBasePlayer::GiveAmmo( 12,	"Buckshot" );
+		}
+		else if ( primary == 4 )
+		{
+			GiveNamedItem( "weapon_crossbow" );
+			CBasePlayer::GiveAmmo( 10,	"XBowBolt" );
+		}
 
-	GiveNamedItem( "weapon_pistol" );
-	GiveNamedItem( "weapon_smg1" );
+		if ( secondary == 1 )
+		{
+			GiveNamedItem( "weapon_pistol" );
+			CBasePlayer::GiveAmmo( 24,	"Pistol" );
+		}
+		else if ( secondary == 2 )
+		{
+			GiveNamedItem( "weapon_357" );
+			CBasePlayer::GiveAmmo( 12,	"357" );
+		}
+	}
+	else if ( GetTeamNumber() == TEAM_MUTANT ) {
+		GiveNamedItem( "weapon_crowbar" );
+	}
 
 	const char *szDefaultWeaponName = engine->GetClientConVarValue( engine->IndexOfEdict( edict() ), "cl_defaultweapon" );
-
 	CBaseCombatWeapon *pDefaultWeapon = Weapon_OwnsThisType( szDefaultWeaponName );
 
 	if ( pDefaultWeapon )
 	{
 		Weapon_Switch( pDefaultWeapon );
-	}
-	else
-	{
-		Weapon_Switch( Weapon_OwnsThisType( "weapon_physcannon" ) );
 	}
 }
 
@@ -266,7 +296,7 @@ void CHL2MP_Player::Spawn(void)
 
 		RemoveEffects( EF_NODRAW );
 		
-		GiveDefaultItems();
+		GiveLoadoutItems();
 	}
 
 	SetNumAnimOverlays( 3 );
@@ -962,6 +992,14 @@ bool CHL2MP_Player::HandleCommand_JoinTeam( int team )
 		}
 	}
 
+	// Load the class panel for the team
+	if (team == TEAM_MUTANT) {
+		ShowViewPortPanel( PANEL_MUTATION, true, new KeyValues("data") );
+	}
+	else if (team == TEAM_SWAT) {
+		ShowViewPortPanel( PANEL_CLASS, true, new KeyValues("data") );
+	}
+
 	// Switch their actual team...
 	ChangeTeam( team );
 
@@ -995,6 +1033,19 @@ bool CHL2MP_Player::ClientCommand( const CCommand &args )
 	}
 	else if ( FStrEq( args[0], "joingame" ) )
 	{
+		return true;
+	}
+	else if ( FStrEq( args[0], "saveloadout" ) )
+	{
+		if ( args.ArgC() < 2 )
+		{
+			Warning( "Player sent bad saveloadout syntax\n" );
+		}
+
+		if ( ShouldRunRateLimitedCommand( args ) )
+		{
+			m_iLoadout = atoi( args[1] );
+		}
 		return true;
 	}
 

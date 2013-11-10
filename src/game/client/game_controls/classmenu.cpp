@@ -5,7 +5,6 @@
 // $NoKeywords: $
 //=============================================================================//
 
-
 #include "cbase.h"
 #include <stdio.h>
 
@@ -17,6 +16,7 @@
 #include <vgui/ILocalize.h>
 #include <vgui/ISurface.h>
 #include <KeyValues.h>
+#include <vgui_controls/RadioButton.h>
 #include <vgui_controls/ImageList.h>
 #include <filesystem.h>
 
@@ -107,6 +107,14 @@ CClassMenu::~CClassMenu()
 {
 }
 
+void CClassMenu::Update() 
+{
+	if ( m_iLoadout == 0 )
+	{
+		SetDefaults();
+	}
+}
+
 MouseOverPanelButton* CClassMenu::CreateNewMouseOverPanelButton(EditablePanel *panel)
 { 
 	return new MouseOverPanelButton(this, "MouseOverPanelButton", panel);
@@ -159,23 +167,67 @@ void CClassMenu::Reset()
 	}
 }
 
+void CClassMenu::SetDefaults()
+{
+	dynamic_cast<RadioButton *>(FindChildByName( "SMGRadioButton" ))->SetSelected( true );
+	dynamic_cast<RadioButton *>(FindChildByName( "9mmRadioButton" ))->SetSelected( true );
+	dynamic_cast<RadioButton *>(FindChildByName( "AmmoPackRadioButton" ))->SetSelected( true );
+}
+
+void CClassMenu::GetLoadout() {
+	m_pSMGRadioButton = dynamic_cast<RadioButton *>(FindChildByName( "SMGRadioButton" ));
+	m_pARRadioButton = dynamic_cast<RadioButton *>(FindChildByName( "RifleRadioButton" ));
+	m_pShotgunRadioButton = dynamic_cast<RadioButton *>(FindChildByName( "ShotgunRadioButton" ));
+	m_pTranquilizerRadioButton = dynamic_cast<RadioButton *>(FindChildByName( "TranquilizerRadioButton" ));
+	m_p9mmRadioButton = dynamic_cast<RadioButton *>(FindChildByName( "9mmRadioButton" ));
+	m_pDeagleRadioButton = dynamic_cast<RadioButton *>(FindChildByName( "DeagleRadioButton" ));
+	m_pAmmoPackRadioButton = dynamic_cast<RadioButton *>(FindChildByName( "AmmoPackRadioButton" ));
+	m_pSensorRadioButton = dynamic_cast<RadioButton *>(FindChildByName( "SensorRadioButton" ));
+
+	int primary = 1,
+		secondary = 1,
+		equipment = 1;
+
+	if ( m_pARRadioButton->IsSelected() ) 
+	{
+		primary = 2;
+	}
+	else if ( m_pShotgunRadioButton->IsSelected() ) 
+	{
+		primary = 3;
+	}
+	else if ( m_pTranquilizerRadioButton->IsSelected() ) 
+	{
+		primary = 4;
+	}
+
+	if ( m_pDeagleRadioButton->IsSelected() ) 
+	{
+		secondary = 2;
+	}
+
+	m_iLoadout = 100 * primary + 10 * secondary + equipment;
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Called when the user picks a class
 //-----------------------------------------------------------------------------
 void CClassMenu::OnCommand( const char *command )
 {
-	if ( Q_stricmp( command, "vguicancel" ) )
+	if ( Q_stricmp( command, "saveloadout" ) == 0 )
+	{
+		GetLoadout();
+		char buffer[3];
+		char commandConst[17] = "saveloadout ";
+		itoa(m_iLoadout, buffer, 10);
+		
+		char *newCommand = strcat(commandConst, buffer);
+		
+		engine->ClientCmd( const_cast<char *>( newCommand ));
+	}
+	else if ( Q_stricmp( command, "vguicancel" ) )
 	{
 		engine->ClientCmd( const_cast<char *>( command ) );
-
-#if !defined( CSTRIKE_DLL ) && !defined( TF_CLIENT_DLL )
-		// They entered a command to change their class, kill them so they spawn with 
-		// the new class right away
-		if ( hud_classautokill.GetBool() )
-		{
-            engine->ClientCmd( "kill" );
-		}
-#endif // !CSTRIKE_DLL && !TF_CLIENT_DLL
 	}
 
 	Close();

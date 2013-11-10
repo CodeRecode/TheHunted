@@ -1943,6 +1943,12 @@
     <ClInclude Include="toolframework_client.h">
       <Filter>Tool Framework</Filter>
     </ClInclude>
+    <ClInclude Include="game_controls\classmenu.h">
+      <Filter>game_controls Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_controls\mutationmenu.h">
+      <Filter>game_controls Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mp3player.cpp">
@@ -3501,6 +3507,12 @@
     </ClCompile>
     <ClCompile Include="toolframework_client.cpp">
       <Filter>Tool Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="game_controls\classmenu.cpp">
+      <Filter>Source Files\game_controls</Filter>
+    </ClCompile>
+    <ClCompile Include="game_controls\mutationmenu.cpp">
+      <Filter>Source Files\game_controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

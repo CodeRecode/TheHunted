@@ -5,8 +5,8 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#ifndef CLASSMENU_H
-#define CLASSMENU_H
+#ifndef MUTATIONMENU_H
+#define MUTATIONMENU_H
 #ifdef _WIN32
 #pragma once
 #endif
@@ -29,20 +29,19 @@ namespace vgui
 //-----------------------------------------------------------------------------
 // Purpose: Draws the class menu
 //-----------------------------------------------------------------------------
-class CClassMenu : public vgui::Frame, public IViewPortPanel
+class CMutationMenu : public vgui::Frame, public IViewPortPanel
 {
 private:
-	DECLARE_CLASS_SIMPLE( CClassMenu, vgui::Frame );
+	DECLARE_CLASS_SIMPLE( CMutationMenu, vgui::Frame );
 
 public:
-	CClassMenu(IViewPort *pViewPort);
-	CClassMenu(IViewPort *pViewPort, const char *panelName );
-	virtual ~CClassMenu();
+	CMutationMenu(IViewPort *pViewPort);
+	virtual ~CMutationMenu();
 
 	virtual const char *GetName( void ) { return PANEL_CLASS; }
 	virtual void SetData(KeyValues *data);
 	virtual void Reset();
-	virtual void Update();
+	virtual void Update() {};
 	virtual bool NeedsUpdate( void ) { return false; }
 	virtual bool HasInputElements( void ) { return true; }
 	virtual void ShowPanel( bool bShow );
@@ -51,19 +50,6 @@ public:
 	vgui::VPANEL GetVPanel( void ) { return BaseClass::GetVPanel(); }
 	virtual bool IsVisible() { return BaseClass::IsVisible(); }
 	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
-
-	virtual void SetDefaults();
-	virtual void GetLoadout();
-
-	// equipment radio buttons
-	vgui::RadioButton *m_pSMGRadioButton;
-	vgui::RadioButton *m_pARRadioButton;
-	vgui::RadioButton *m_pShotgunRadioButton;
-	vgui::RadioButton *m_pTranquilizerRadioButton;
-	vgui::RadioButton *m_p9mmRadioButton;
-	vgui::RadioButton *m_pDeagleRadioButton;
-	vgui::RadioButton *m_pAmmoPackRadioButton;
-	vgui::RadioButton *m_pSensorRadioButton;
 
 protected:
 
@@ -81,13 +67,7 @@ protected:
 	void OnCommand( const char *command );
 
 	IViewPort	*m_pViewPort;
-	ButtonCode_t m_iScoreBoardKey;
-	int			m_iTeam;
-	int m_iLoadout;
-	vgui::EditablePanel *m_pPanel;
-
-	CUtlVector< MouseOverPanelButton * > m_mouseoverButtons;
 };
 
 
-#endif // CLASSMENU_H
+#endif // MUTATIONMENU_H

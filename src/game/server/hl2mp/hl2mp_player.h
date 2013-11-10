@@ -89,7 +89,7 @@ public:
 	void CheatImpulseCommands( int iImpulse );
 	void CreateRagdollEntity( void );
 	void GiveAllItems( void );
-	void GiveDefaultItems( void );
+	void GiveLoadoutItems( void );
 
 	void NoteWeaponFired( void );
 
@@ -136,7 +136,6 @@ public:
 	CNetworkHandle( CBaseEntity, m_hRagdoll );	// networked entity handle 
 
 	virtual bool	CanHearAndReadChatFrom( CBasePlayer *pPlayer );
-
 		
 private:
 
