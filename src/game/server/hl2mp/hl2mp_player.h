@@ -144,6 +144,7 @@ private:
 
 	int m_iLastWeaponFireUsercmd;
 	int m_iModelType;
+	int m_iLoadout;
 	CNetworkVar( int, m_iSpawnInterpCounter );
 	CNetworkVar( int, m_iPlayerSoundType );
 

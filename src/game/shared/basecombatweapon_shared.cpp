@@ -1651,6 +1651,34 @@ void CBaseCombatWeapon::ItemPostFrame( void )
 	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
 	if (!pOwner)
 		return;
+	
+	// TODO (davideo): See if we can stop this from going if the player is holding down the key but not sprinting
+	if ( !bLowered && (pOwner->m_nButtons & IN_SPEED ) )
+	{
+		bLowered = true;
+		SendWeaponAnim( ACT_VM_IDLE_LOWERED );
+		m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+		m_flNextPrimaryAttack = m_fLoweredReady;
+	}
+	else if ( bLowered && !(pOwner->m_nButtons & IN_SPEED ) )
+	{
+		bLowered = false;
+		SendWeaponAnim( ACT_VM_IDLE );
+		m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+		m_flNextPrimaryAttack = m_fLoweredReady;
+	}
+ 
+	if ( bLowered )
+	{
+		if ( gpGlobals->curtime > m_fLoweredReady )
+		{
+			bLowered = true;
+			SendWeaponAnim( ACT_VM_IDLE_LOWERED );
+			m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+			m_flNextPrimaryAttack = m_fLoweredReady;
+		}
+		return;
+	}
 
 	UpdateAutoFire();
 

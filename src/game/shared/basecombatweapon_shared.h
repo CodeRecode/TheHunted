@@ -210,6 +210,11 @@ public:
 	float					GetViewModelSequenceDuration();	// Return how long the current view model sequence is.
 	bool					IsViewModelSequenceFinished( void ); // Returns if the viewmodel's current animation is finished
 
+	bool                    m_bLowered;
+	bool                    bLowered;
+	float                   m_fLowered;
+	float                   m_fLoweredReady;
+
 	virtual void			SetViewModel();
 
 	virtual bool			HasWeaponIdleTimeElapsed( void );

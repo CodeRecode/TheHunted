@@ -27,7 +27,7 @@
 #include "tier0/memdbgon.h"
 
 #define	CROWBAR_RANGE	75.0f
-#define	CROWBAR_REFIRE	1.0f
+#define	CROWBAR_REFIRE	.75f
 
 
 //-----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ CWeaponCrowbar::CWeaponCrowbar( void )
 //-----------------------------------------------------------------------------
 float CWeaponCrowbar::GetDamageForActivity( Activity hitActivity )
 {
-	return 25.0f;
+	return 34.0f;
 }
 
 //-----------------------------------------------------------------------------

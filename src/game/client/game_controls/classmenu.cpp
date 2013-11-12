@@ -53,7 +53,8 @@ CClassMenu::CClassMenu(IViewPort *pViewPort) : Frame(NULL, PANEL_CLASS)
 {
 	m_pViewPort = pViewPort;
 	m_iScoreBoardKey = BUTTON_CODE_INVALID; // this is looked up in Activate()
-	m_iTeam = 0;
+	m_iTeam = 0;	
+	m_iLoadout = 0;
 
 	// initialize dialog
 	SetTitle("", true);
@@ -172,6 +173,7 @@ void CClassMenu::SetDefaults()
 	dynamic_cast<RadioButton *>(FindChildByName( "SMGRadioButton" ))->SetSelected( true );
 	dynamic_cast<RadioButton *>(FindChildByName( "9mmRadioButton" ))->SetSelected( true );
 	dynamic_cast<RadioButton *>(FindChildByName( "AmmoPackRadioButton" ))->SetSelected( true );
+	m_iLoadout = 111;
 }
 
 void CClassMenu::GetLoadout() {

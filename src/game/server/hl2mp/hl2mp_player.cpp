@@ -237,6 +237,7 @@ void CHL2MP_Player::GiveLoadoutItems( void )
 	}
 	else if ( GetTeamNumber() == TEAM_MUTANT ) {
 		GiveNamedItem( "weapon_crowbar" );
+		CBasePlayer::GiveAmmo( 2,	"grenade" );
 	}
 
 	const char *szDefaultWeaponName = engine->GetClientConVarValue( engine->IndexOfEdict( edict() ), "cl_defaultweapon" );
@@ -302,8 +303,6 @@ void CHL2MP_Player::Spawn(void)
 	SetNumAnimOverlays( 3 );
 	ResetAnimation();
 
-	m_nRenderFX = kRenderNormal;
-
 	m_Local.m_iHideHUD = 0;
 	
 	AddFlag(FL_ONGROUND); // set the player on the ground at the start of the round.
@@ -335,6 +334,18 @@ void CHL2MP_Player::Spawn(void)
 	{
 		StartObserverMode( OBS_MODE_FIXED );
 	}
+
+	if ( GetTeamNumber() == TEAM_MUTANT ) 
+	{
+		SetRenderColorA( 5 );
+		SetRenderMode( kRenderTransTexture );
+		m_nRenderFX = kRenderNormal;	
+	}
+	else 
+	{
+		SetRenderMode( kRenderNormal );
+		m_nRenderFX = kRenderNormal;
+	}		
 }
 
 void CHL2MP_Player::PickupObject( CBaseEntity *pObject, bool bLimitMassAndSize )
