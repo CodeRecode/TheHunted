@@ -206,38 +206,42 @@ void CHL2MP_Player::GiveLoadoutItems( void )
 		if ( primary == 1 ) 
 		{
 			GiveNamedItem( "weapon_smg1" );
-			CBasePlayer::GiveAmmo( 90,	"SMG1" );
+			CBasePlayer::GiveAmmo( 90, "SMG1" );
 		}
 		else if ( primary == 2 ) 
 		{
 			GiveNamedItem( "weapon_ar2" );
-			CBasePlayer::GiveAmmo( 60,	"AR2" );
+			CBasePlayer::GiveAmmo( 60, "AR2" );
 		}
 		else if ( primary == 3 )
 		{
 			GiveNamedItem( "weapon_shotgun" );
-			CBasePlayer::GiveAmmo( 12,	"Buckshot" );
+			CBasePlayer::GiveAmmo( 12, "Buckshot" );
 		}
 		else if ( primary == 4 )
 		{
 			GiveNamedItem( "weapon_crossbow" );
-			CBasePlayer::GiveAmmo( 10,	"XBowBolt" );
+			CBasePlayer::GiveAmmo( 10, "XBowBolt" );
 		}
 
 		if ( secondary == 1 )
 		{
 			GiveNamedItem( "weapon_pistol" );
-			CBasePlayer::GiveAmmo( 24,	"Pistol" );
+			CBasePlayer::GiveAmmo( 24, "Pistol" );
 		}
 		else if ( secondary == 2 )
 		{
 			GiveNamedItem( "weapon_357" );
-			CBasePlayer::GiveAmmo( 12,	"357" );
+			CBasePlayer::GiveAmmo( 12, "357" );
 		}
 	}
-	else if ( GetTeamNumber() == TEAM_MUTANT ) {
+	else if ( GetTeamNumber() == TEAM_MUTANT ) 
+	{
 		GiveNamedItem( "weapon_crowbar" );
-		CBasePlayer::GiveAmmo( 2,	"grenade" );
+		GiveNamedItem( "weapon_frag" );
+		CBasePlayer::GiveAmmo( 1, "grenade" );
+
+		Weapon_Switch( Weapon_OwnsThisType( "weapon_crowbar" ) );
 	}
 
 	const char *szDefaultWeaponName = engine->GetClientConVarValue( engine->IndexOfEdict( edict() ), "cl_defaultweapon" );
@@ -322,6 +326,8 @@ void CHL2MP_Player::Spawn(void)
 
 	m_Local.m_bDucked = false;
 
+	m_nRenderFX = kRenderNormal;	
+
 	SetPlayerUnderwater(false);
 
 	m_bReady = false;
@@ -339,12 +345,17 @@ void CHL2MP_Player::Spawn(void)
 	{
 		SetRenderColorA( 5 );
 		SetRenderMode( kRenderTransTexture );
-		m_nRenderFX = kRenderNormal;	
+
+		CBaseCombatWeapon *weapon = GetActiveWeapon();
+		weapon->SetRenderColorA( 0 );
+		weapon->SetRenderMode( kRenderTransTexture );
+
+		engine->ClientCommand( edict(), "r_screenoverlay hud/mutantoverlay" );
 	}
 	else 
 	{
 		SetRenderMode( kRenderNormal );
-		m_nRenderFX = kRenderNormal;
+		engine->ClientCommand( edict(), "r_screenoverlay off" );
 	}		
 }
 
@@ -545,6 +556,10 @@ bool CHL2MP_Player::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelinde
 	{
 		ResetAnimation();
 	}
+	
+	CBaseCombatWeapon *weapon = GetActiveWeapon();
+	weapon->SetRenderColorA( 0 );
+	weapon->SetRenderMode( kRenderTransTexture );
 
 	return bRet;
 }
@@ -1207,7 +1222,7 @@ extern ConVar flashlight;
 //-----------------------------------------------------------------------------
 void CHL2MP_Player::FlashlightTurnOn( void )
 {
-	if( flashlight.GetInt() > 0 && IsAlive() )
+	if( GetTeamNumber() == TEAM_SWAT && IsAlive() )
 	{
 		AddEffects( EF_DIMLIGHT );
 		EmitSound( "HL2Player.FlashlightOn" );
