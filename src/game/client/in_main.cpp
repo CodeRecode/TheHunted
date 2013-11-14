@@ -800,7 +800,7 @@ ComputeSideMove
 void CInput::ComputeSideMove( CUserCmd *cmd )
 {
 	// thirdperson platformer movement
-	if ( CAM_IsThirdPerson() && thirdperson_platformer.GetInt() )
+	if ( CAM_IsThirdPerson() && thirdperson_platformer.GetInt() || in_speed.state & 1 )
 	{
 		// no sideways movement in this mode
 		return;
@@ -1035,6 +1035,16 @@ void CInput::ExtraMouseSample( float frametime, bool active )
 			g_pSixenseInput->SetView( frametime, cmd );
 		}
 #endif
+		
+		// scale the yaw movement down if we're sprinting
+		// TODO (davideo): use some real math here
+		if ( in_speed.state & 1 )
+		{
+			QAngle nextViewAngles;
+			engine->GetViewAngles( nextViewAngles );
+			nextViewAngles[YAW] -= AngleNormalize((nextViewAngles[YAW]) - (originalViewangles[YAW])) * .75;
+			engine->SetViewAngles( nextViewAngles );
+		}
 	}
 
 	// Retreive view angles from engine ( could have been set in IN_AdjustAngles above )
