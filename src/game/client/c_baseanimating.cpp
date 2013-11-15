@@ -1013,7 +1013,8 @@ CStudioHdr *C_BaseAnimating::OnNewModel()
 	{
 		// XXX what's authoritative? the model pointer or the model index? what a mess.
 		nNewIndex = modelinfo->GetModelIndex( modelinfo->GetModelName( GetModel() ) );
-		Assert( modelinfo->GetModel( nNewIndex ) == GetModel() );
+		// TODO (davideo): see if this is an issue with the smg or this particular line
+		// Assert( modelinfo->GetModel( nNewIndex ) == GetModel() );
 	}
 
 	m_AutoRefModelIndex = nNewIndex;

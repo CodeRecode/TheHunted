@@ -195,6 +195,18 @@ void CHL2MP_Player::GiveAllItems( void )
 	
 }
 
+void CHL2MP_Player::SetTeamVariations( int iTeam ) 
+{	
+	if ( iTeam == TEAM_SWAT ) 
+	{
+		m_iMaxNormalSpeed = 180;
+	}
+	else if ( iTeam == TEAM_MUTANT )
+	{
+		m_iMaxNormalSpeed = 220;
+	}
+}
+
 void CHL2MP_Player::GiveLoadoutItems( void )
 {	
 	int primary = (int)(m_iLoadout / 100),
@@ -335,6 +347,8 @@ void CHL2MP_Player::Spawn(void)
 	if ( GetTeamNumber() != TEAM_SPECTATOR )
 	{
 		StopObserverMode();
+		State_Transition(STATE_ACTIVE);
+
 	}
 	else
 	{
@@ -929,19 +943,6 @@ void CHL2MP_Player::ChangeTeam( int iTeam )
 		return;
 	}*/
 
-	if ( iTeam == TEAM_SPECTATOR )
-	{
-		if ( GetTeamNumber() != TEAM_UNASSIGNED && !IsDead() )
-		{
-			m_fNextSuicideTime = gpGlobals->curtime;	// allow the suicide to work
-
-			CommitSuicide();
-
-			// add 1 to frags to balance out the 1 subtracted for killing yourself
-			IncrementFragCount( 1 );
-		}
-	}
-
 	bool bKill = false;
 
 	if ( HL2MPRules()->IsTeamplay() != true && iTeam != TEAM_SPECTATOR )
@@ -970,6 +971,18 @@ void CHL2MP_Player::ChangeTeam( int iTeam )
 	{
 		SetPlayerModel();
 	}
+	
+	if ( iTeam == TEAM_SPECTATOR && GetTeamNumber() != TEAM_UNASSIGNED && !IsDead())
+	{
+		m_iHealth = 0;
+		m_fNextSuicideTime = gpGlobals->curtime;	// allow the suicide to work
+		bKill = true;
+	}
+	else if ( iTeam != TEAM_SPECTATOR && GetTeamNumber() == TEAM_SPECTATOR) 
+	{
+		m_iHealth = 0;
+		bKill = true;
+	}
 
 	if ( iTeam == TEAM_SPECTATOR )
 	{
@@ -981,6 +994,8 @@ void CHL2MP_Player::ChangeTeam( int iTeam )
 	{
 		StopObserverMode();
 		State_Transition(STATE_ACTIVE);
+
+		SetTeamVariations( iTeam );
 
 		if ( bKill == true )
 		{

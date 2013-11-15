@@ -1042,7 +1042,7 @@ void CInput::ExtraMouseSample( float frametime, bool active )
 		{
 			QAngle nextViewAngles;
 			engine->GetViewAngles( nextViewAngles );
-			nextViewAngles[YAW] -= AngleNormalize((nextViewAngles[YAW]) - (originalViewangles[YAW])) * .75;
+			nextViewAngles[YAW] -= AngleNormalize((nextViewAngles[YAW]) - (originalViewangles[YAW])) * .6;
 			engine->SetViewAngles( nextViewAngles );
 		}
 	}

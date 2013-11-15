@@ -90,6 +90,7 @@ public:
 	void CreateRagdollEntity( void );
 	void GiveAllItems( void );
 	void GiveLoadoutItems( void );
+	void SetTeamVariations( int iTeam );
 
 	void NoteWeaponFired( void );
 
