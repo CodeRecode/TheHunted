@@ -200,10 +200,12 @@ void CHL2MP_Player::SetTeamVariations( int iTeam )
 	if ( iTeam == TEAM_SWAT ) 
 	{
 		m_iMaxNormalSpeed = 180;
+		EnableSprint( true );
 	}
 	else if ( iTeam == TEAM_MUTANT )
 	{
 		m_iMaxNormalSpeed = 220;
+		EnableSprint( false );
 	}
 }
 

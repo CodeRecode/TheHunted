@@ -1913,7 +1913,7 @@ void CGameMovement::WalkMove( void )
 	fmove = mv->m_flForwardMove;
 	smove = mv->m_flSideMove;
 	
-	if ( cl_viewbob_enabled.GetInt() == 1 && !engine->IsPaused() && ( mv->m_nButtons & IN_SPEED ) )
+	if ( cl_viewbob_enabled.GetInt() == 1 && !engine->IsPaused() && ( mv->m_nButtons & IN_SPEED ) && player->GetTeamNumber() == 3 ) // on team SWAT
 	{
 		float xoffset = sin( gpGlobals->curtime * cl_viewbob_timer.GetFloat() ) * player->GetAbsVelocity().Length() * cl_viewbob_scale.GetFloat() / 100;
 		float yoffset = sin( 2 * gpGlobals->curtime * cl_viewbob_timer.GetFloat() ) * player->GetAbsVelocity().Length() * cl_viewbob_scale.GetFloat() / 100;
@@ -2065,9 +2065,14 @@ void CGameMovement::FullWalkMove( )
 		{
 			CheckJumpButton();
 		}
+		else if ( mv->m_nButtons & IN_POUNCE )
+		{
+			CheckPounceButton();
+		}
 		else
 		{
 			mv->m_nOldButtons &= ~IN_JUMP;
+			mv->m_nOldButtons &= ~IN_POUNCE;
 		}
 
 		// Perform regular water movement
@@ -2090,9 +2095,14 @@ void CGameMovement::FullWalkMove( )
 		{
  			CheckJumpButton();
 		}
+		else if ( mv->m_nButtons & IN_POUNCE )
+		{
+			CheckPounceButton();
+		}
 		else
 		{
 			mv->m_nOldButtons &= ~IN_JUMP;
+			mv->m_nOldButtons &= ~IN_POUNCE;
 		}
 
 		// Fricion is handled before we add in any base velocity. That way, if we are on a conveyor, 
@@ -2534,6 +2544,87 @@ bool CGameMovement::CheckJumpButton( void )
 	return true;
 }
 
+bool CGameMovement::CheckPounceButton( void ) 
+{
+	if (player->pl.deadflag)
+	{
+		mv->m_nOldButtons |= IN_POUNCE ;	// don't pounce again until released
+		return false;
+	}
+
+	// No more effect
+ 	if (player->GetGroundEntity() == NULL)
+	{
+		mv->m_nOldButtons |= IN_POUNCE;
+		return false;		// in air, so no effect
+	}
+
+	if ( mv->m_nOldButtons & IN_POUNCE )
+		return false;		// don't pogo stick
+
+	// Cannot jump will in the unduck transition.
+	if ( player->m_Local.m_bDucking && (  player->GetFlags() & FL_DUCKING ) )
+		return false;
+
+	// Still updating the eye position.
+	if ( player->m_Local.m_flDuckJumpTime > 0.0f )
+		return false;
+
+	if ( player->GetTeamNumber() == 3 ) // Team SWAT can't pounce
+		return false;
+
+	// In the air now.
+    SetGroundEntity( NULL );
+	
+	player->PlayStepSound( (Vector &)mv->GetAbsOrigin(), player->m_pSurfaceData, 1.0, true );
+	
+	MoveHelper()->PlayerSetAnimation( PLAYER_JUMP );
+
+	float flGroundFactor = 1.0f;
+	if (player->m_pSurfaceData)
+	{
+		flGroundFactor = player->m_pSurfaceData->game.jumpFactor; 
+	}
+
+	float flMul;
+	if ( g_bMovementOptimizations )
+	{
+		Assert( GetCurrentGravity() == 600.0f );
+		flMul = 600.0;
+	}
+
+	// Acclerate upward
+	// If we are ducking...
+	float startz = mv->m_vecVelocity[2];
+	if ( (  player->m_Local.m_bDucking ) || (  player->GetFlags() & FL_DUCKING ) )
+	{
+		// magnitude = sqrt(x^2 + y^2 + z^2)
+		Vector	vForward;
+		player->EyeVectors( &vForward, NULL, NULL );
+		mv->m_vecVelocity = vForward * flGroundFactor * flMul;  // 2 * gravity * height
+	}
+	else
+	{
+		Vector	vForward;
+		player->EyeVectors( &vForward, NULL, NULL );
+		mv->m_vecVelocity[2] = 0;
+		mv->m_vecVelocity += vForward * flGroundFactor * flMul;  // 2 * gravity * height
+	}
+
+	FinishGravity();
+
+	CheckV( player->CurrentCommandNumber(), "CheckJump", mv->m_vecVelocity );
+
+	mv->m_outJumpVel.z += mv->m_vecVelocity[2] - startz;
+	mv->m_outStepHeight += 0.15f;
+
+	OnJump(mv->m_outJumpVel.z);
+
+	// Flag that we jumped.
+	mv->m_nOldButtons |= IN_POUNCE;	// don't jump again until released
+	return true;
+}
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -2547,9 +2638,14 @@ void CGameMovement::FullLadderMove()
 	{
 		CheckJumpButton();
 	}
+	else if ( mv->m_nButtons & IN_POUNCE )
+	{
+		CheckPounceButton();
+	}
 	else
 	{
 		mv->m_nOldButtons &= ~IN_JUMP;
+		mv->m_nOldButtons &= ~IN_POUNCE;
 	}
 	
 	// Perform the move accounting for any base velocity.

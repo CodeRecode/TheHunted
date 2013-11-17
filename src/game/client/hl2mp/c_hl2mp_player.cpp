@@ -38,7 +38,7 @@ END_PREDICTION_DATA()
 
 #define	HL2_WALK_SPEED 150
 #define	HL2_NORM_SPEED 190
-#define	HL2_SPRINT_SPEED 320
+#define	HL2_SPRINT_SPEED 290
 
 static ConVar cl_playermodel( "cl_playermodel", "none", FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_SERVER_CAN_EXECUTE, "Default Player Model");
 static ConVar cl_defaultweapon( "cl_defaultweapon", "weapon_smg1", FCVAR_USERINFO | FCVAR_ARCHIVE, "Default Spawn Weapon");
@@ -558,7 +558,7 @@ Vector C_HL2MP_Player::GetAutoaimVector( float flDelta )
 //-----------------------------------------------------------------------------
 bool C_HL2MP_Player::CanSprint( void )
 {
-	return ( (!m_Local.m_bDucked && !m_Local.m_bDucking) && (GetWaterLevel() != 3) );
+	return ( (!m_Local.m_bDucked && !m_Local.m_bDucking) && (GetWaterLevel() != 3) && GetTeamNumber() != TEAM_MUTANT );
 }
 
 

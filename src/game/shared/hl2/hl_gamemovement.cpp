@@ -538,9 +538,15 @@ void CHL2GameMovement::FullLadderMove()
 		CheckJumpButton();
 		return;
 	}
+	else if ( mv->m_nButtons & IN_POUNCE )
+	{
+		CheckPounceButton();
+		return;
+	}
 	else
 	{
 		mv->m_nOldButtons &= ~IN_JUMP;
+		mv->m_nOldButtons &= ~IN_POUNCE;
 	}
 
 	player->SetGroundEntity( NULL );
