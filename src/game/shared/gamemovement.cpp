@@ -622,6 +622,9 @@ CGameMovement::CGameMovement( void )
 
 	mv					= NULL;
 
+	m_bIsInWallGrab = false;
+	m_bWallGrabPounce = false;
+
 	memset( m_flStuckCheckTime, 0, sizeof(m_flStuckCheckTime) );
 }
 
@@ -2552,13 +2555,6 @@ bool CGameMovement::CheckPounceButton( void )
 		return false;
 	}
 
-	// No more effect
- 	if (player->GetGroundEntity() == NULL)
-	{
-		mv->m_nOldButtons |= IN_POUNCE;
-		return false;		// in air, so no effect
-	}
-
 	if ( mv->m_nOldButtons & IN_POUNCE )
 		return false;		// don't pogo stick
 
@@ -2573,6 +2569,40 @@ bool CGameMovement::CheckPounceButton( void )
 	if ( player->GetTeamNumber() == 3 ) // Team SWAT can't pounce
 		return false;
 
+	// Check for wall grab or grab -> pounce, otherwise do nothing
+ 	if (player->GetGroundEntity() == NULL)
+	{
+		Vector vStartpoint = player->GetAbsOrigin(),
+			vEndpoint,
+			vForward;
+		trace_t tr;
+		
+		player->EyeVectors( &vForward, NULL, NULL );
+		vEndpoint = vStartpoint + vForward * 40.0; // 5 or so units directly in front of the player
+
+		UTIL_TraceLine( vStartpoint, vEndpoint, MASK_ALL, player, COLLISION_GROUP_NONE, &tr );
+
+		if ( tr.DidHit() ) // there is a wall
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				mv->m_vecVelocity[i] = 0;
+			}
+			player->SetMoveType( MOVETYPE_NONE );
+			m_bIsInWallGrab = true;
+			return true;
+		}
+		else if ( !m_bWallGrabPounce )
+		{
+			mv->m_nOldButtons |= IN_POUNCE;
+			return false;		// in air, so no effect
+		}
+		else 
+		{
+			m_bWallGrabPounce = false;
+		}
+	}
+
 	// In the air now.
     SetGroundEntity( NULL );
 	
@@ -2586,12 +2616,7 @@ bool CGameMovement::CheckPounceButton( void )
 		flGroundFactor = player->m_pSurfaceData->game.jumpFactor; 
 	}
 
-	float flMul;
-	if ( g_bMovementOptimizations )
-	{
-		Assert( GetCurrentGravity() == 600.0f );
-		flMul = 600.0;
-	}
+	float flMul = 600;
 
 	// Acclerate upward
 	// If we are ducking...
@@ -2601,14 +2626,14 @@ bool CGameMovement::CheckPounceButton( void )
 		// magnitude = sqrt(x^2 + y^2 + z^2)
 		Vector	vForward;
 		player->EyeVectors( &vForward, NULL, NULL );
-		mv->m_vecVelocity = vForward * flGroundFactor * flMul;  // 2 * gravity * height
+		mv->m_vecVelocity = vForward * flGroundFactor * flMul;
 	}
 	else
 	{
 		Vector	vForward;
 		player->EyeVectors( &vForward, NULL, NULL );
 		mv->m_vecVelocity[2] = 0;
-		mv->m_vecVelocity += vForward * flGroundFactor * flMul;  // 2 * gravity * height
+		mv->m_vecVelocity += vForward * flGroundFactor * flMul;
 	}
 
 	FinishGravity();
@@ -4714,6 +4739,26 @@ void CGameMovement::PlayerMove( void )
 				// It will be reset immediately again next frame if necessary
 				player->SetMoveType( MOVETYPE_WALK );
 				player->SetMoveCollide( MOVECOLLIDE_DEFAULT );
+			}
+		}
+		
+		if ( m_bIsInWallGrab ) // in a wall grab
+		{
+			int oldButtons = mv->m_nOldButtons,
+				buttons = mv->m_nButtons;
+			if ( mv->m_nButtons & ~IN_POUNCE && mv->m_nOldButtons & IN_POUNCE ) // clear the flags
+			{
+				mv->m_nOldButtons &= ~IN_JUMP;
+				mv->m_nOldButtons &= ~IN_POUNCE;
+			}
+			else if ( ( mv->m_nButtons & IN_POUNCE || mv->m_nButtons & IN_JUMP ) && mv->m_nOldButtons == 0 ) // get out of the grab
+			{
+				if ( mv->m_nButtons & IN_POUNCE )
+				{
+					m_bWallGrabPounce = true;
+				}
+				player->SetMoveType( MOVETYPE_WALK );
+				m_bIsInWallGrab = false;
 			}
 		}
 	}

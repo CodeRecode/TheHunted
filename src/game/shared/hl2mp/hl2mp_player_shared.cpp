@@ -70,7 +70,7 @@ Vector CHL2MP_Player::GetAttackSpread( CBaseCombatWeapon *pWeapon, CBaseEntity *
 //-----------------------------------------------------------------------------
 void CHL2MP_Player::PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force )
 {
-	if ( gpGlobals->maxClients > 1 && !sv_footsteps.GetFloat() || GetTeamNumber() == 2 )
+	if ( gpGlobals->maxClients > 1 && !sv_footsteps.GetFloat() )
 		return;
 
 #if defined( CLIENT_DLL )

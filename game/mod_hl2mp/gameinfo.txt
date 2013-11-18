@@ -1,8 +1,8 @@
 "GameInfo"
 {
 	game	"The Hunted"
-	title	"The Hunted source mod"
-	title2	"deathmatch mod"
+	title	"The Hunted Source Mod"
+	title2	"ALPHA V1"
 	type multiplayer_only
 	nomodels 0
 	nohimodel 1
