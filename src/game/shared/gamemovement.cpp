@@ -2572,30 +2572,38 @@ bool CGameMovement::CheckPounceButton( void )
 	// Check for wall grab or grab -> pounce, otherwise do nothing
  	if (player->GetGroundEntity() == NULL)
 	{
-		Vector vStartpoint = player->GetAbsOrigin(),
-			vEndpoint,
-			vForward;
-		trace_t tr;
+		if ( !m_bWallGrabPounce )
+		{
+			Vector vStartpoint = player->GetAbsOrigin(),
+				vEndpoint,
+				vForward;
+			trace_t tr;
 		
-		player->EyeVectors( &vForward, NULL, NULL );
-		vEndpoint = vStartpoint + vForward * 40.0; // 5 or so units directly in front of the player
+			player->EyeVectors( &vForward, NULL, NULL );
+			vEndpoint = vStartpoint + vForward * 40.0; // 5 or so units directly in front of the player
 
-		UTIL_TraceLine( vStartpoint, vEndpoint, MASK_ALL, player, COLLISION_GROUP_NONE, &tr );
-
-		if ( tr.DidHit() ) // there is a wall
-		{
-			for (int i = 0; i < 3; i++)
+			if (vEndpoint[2] > vStartpoint [2] + 30) 
 			{
-				mv->m_vecVelocity[i] = 0;
+				vEndpoint[2] += 50;
 			}
-			player->SetMoveType( MOVETYPE_NONE );
-			m_bIsInWallGrab = true;
-			return true;
-		}
-		else if ( !m_bWallGrabPounce )
-		{
-			mv->m_nOldButtons |= IN_POUNCE;
-			return false;		// in air, so no effect
+
+			UTIL_TraceLine( vStartpoint, vEndpoint, MASK_ALL, player, COLLISION_GROUP_NONE, &tr );
+
+			if ( tr.DidHit() ) // there is a wall
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					mv->m_vecVelocity[i] = 0;
+				}
+				player->SetMoveType( MOVETYPE_NONE );
+				m_bIsInWallGrab = true;
+				return true;
+			}
+			else
+			{
+				mv->m_nOldButtons |= IN_POUNCE;
+				return false;		// in air, so no effect
+			}
 		}
 		else 
 		{
@@ -4744,8 +4752,6 @@ void CGameMovement::PlayerMove( void )
 		
 		if ( m_bIsInWallGrab ) // in a wall grab
 		{
-			int oldButtons = mv->m_nOldButtons,
-				buttons = mv->m_nButtons;
 			if ( mv->m_nButtons & ~IN_POUNCE && mv->m_nOldButtons & IN_POUNCE ) // clear the flags
 			{
 				mv->m_nOldButtons &= ~IN_JUMP;

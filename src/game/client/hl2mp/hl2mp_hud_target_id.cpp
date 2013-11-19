@@ -153,7 +153,7 @@ void CTargetID::Paint()
 		// Is it a player?
 		if ( IsPlayerIndex( iEntIndex ) )
 		{
-			c = GetColorForTargetTeam( pPlayer->GetTeamNumber() );
+			/*c = GetColorForTargetTeam( pPlayer->GetTeamNumber() );
 
 			bShowPlayerName = true;
 			g_pVGuiLocalize->ConvertANSIToUnicode( pPlayer->GetPlayerName(),  wszPlayerName, sizeof(wszPlayerName) );
@@ -173,7 +173,7 @@ void CTargetID::Paint()
 			{
 				_snwprintf( wszHealthText, ARRAYSIZE(wszHealthText) - 1, L"%.0f%%",  ((float)pPlayer->GetHealth() / (float)pPlayer->GetMaxHealth() ) );
 				wszHealthText[ ARRAYSIZE(wszHealthText)-1 ] = '\0';
-			}
+			}*/
 		}
 
 		if ( printFormatString )

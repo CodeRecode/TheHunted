@@ -255,6 +255,14 @@ void CHL2MP_Player::GiveLoadoutItems( void )
 		GiveNamedItem( "weapon_frag" );
 		CBasePlayer::GiveAmmo( 1, "grenade" );
 
+		CBaseCombatWeapon *crowbar = Weapon_OwnsThisType( "weapon_crowbar" );
+		crowbar->SetRenderColorA( 0 );
+		crowbar->SetRenderMode( kRenderTransTexture );
+
+		CBaseCombatWeapon *frag = Weapon_OwnsThisType( "weapon_frag" );
+		frag->SetRenderColorA( 0 );
+		frag->SetRenderMode( kRenderTransTexture );
+
 		Weapon_Switch( Weapon_OwnsThisType( "weapon_crowbar" ) );
 	}
 
@@ -361,10 +369,6 @@ void CHL2MP_Player::Spawn(void)
 	{
 		SetRenderColorA( 5 );
 		SetRenderMode( kRenderTransTexture );
-
-		CBaseCombatWeapon *weapon = GetActiveWeapon();
-		weapon->SetRenderColorA( 0 );
-		weapon->SetRenderMode( kRenderTransTexture );
 
 		engine->ClientCommand( edict(), "r_screenoverlay hud/mutantoverlay" );
 	}
@@ -572,10 +576,6 @@ bool CHL2MP_Player::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelinde
 	{
 		ResetAnimation();
 	}
-	
-	CBaseCombatWeapon *weapon = GetActiveWeapon();
-	weapon->SetRenderColorA( 0 );
-	weapon->SetRenderMode( kRenderTransTexture );
 
 	return bRet;
 }

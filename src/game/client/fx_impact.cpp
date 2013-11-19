@@ -142,6 +142,11 @@ bool Impact( Vector &vecOrigin, Vector &vecStart, int iMaterial, int iDamageType
 			}
 		}
 #endif
+		// (davideo): don't show blood decals on the player model, makes the mutant too visible
+		if ( V_strstr( pchDecalName, "Flesh" ) )
+		{
+			bSkipDecal = true;
+		}
 
 		if ( !bSkipDecal )
 		{

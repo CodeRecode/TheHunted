@@ -2,7 +2,7 @@
 {
 	game	"The Hunted"
 	title	"The Hunted Source Mod"
-	title2	"ALPHA V1"
+	title2	"ALPHA V2"
 	type multiplayer_only
 	nomodels 0
 	nohimodel 1
