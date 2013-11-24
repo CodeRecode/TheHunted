@@ -619,6 +619,9 @@ CBasePlayer::CBasePlayer( )
 	m_bDuckToggled = false;
 	m_bPhysicsWasFrozen = false;
 
+	m_bIsWallGrabbed = false;
+	m_bWallGrabPounce = false;
+
 	// Used to mask off buttons
 	m_afButtonDisabled = 0;
 	m_afButtonForced = 0;

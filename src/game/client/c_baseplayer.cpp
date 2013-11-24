@@ -471,6 +471,9 @@ void C_BasePlayer::Spawn( void )
 	m_bWasFreezeFraming = false;
 
 	m_bFiredWeapon = false;
+
+	m_bIsWallGrabbed = false;
+	m_bWallGrabPounce = false;
 }
 
 //-----------------------------------------------------------------------------

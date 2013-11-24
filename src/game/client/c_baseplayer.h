@@ -521,6 +521,9 @@ private:
 
 	bool			m_bFiredWeapon;
 
+	bool			m_bIsWallGrabbed;		// In a wall grab
+	bool			m_bWallGrabPounce;		// The pounce is a pounce off a wallgrab
+
 
 	// Player flashlight dynamic light pointers
 	CFlashlightEffect *m_pFlashlight;

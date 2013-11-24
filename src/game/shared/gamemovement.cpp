@@ -622,9 +622,6 @@ CGameMovement::CGameMovement( void )
 
 	mv					= NULL;
 
-	m_bIsInWallGrab = false;
-	m_bWallGrabPounce = false;
-
 	memset( m_flStuckCheckTime, 0, sizeof(m_flStuckCheckTime) );
 }
 
@@ -2572,7 +2569,7 @@ bool CGameMovement::CheckPounceButton( void )
 	// Check for wall grab or grab -> pounce, otherwise do nothing
  	if (player->GetGroundEntity() == NULL)
 	{
-		if ( !m_bWallGrabPounce )
+		if ( !player->m_bWallGrabPounce )
 		{
 			Vector vStartpoint = player->GetAbsOrigin(),
 				vEndpoint,
@@ -2580,9 +2577,9 @@ bool CGameMovement::CheckPounceButton( void )
 			trace_t tr;
 		
 			player->EyeVectors( &vForward, NULL, NULL );
-			vEndpoint = vStartpoint + vForward * 40.0; // 5 or so units directly in front of the player
+			vEndpoint = vStartpoint + vForward * 50.0; // 6 or so units directly in front of the player
 
-			if (vEndpoint[2] > vStartpoint [2] + 30) 
+			if (vEndpoint[2] > vStartpoint [2] + 40) 
 			{
 				vEndpoint[2] += 50;
 			}
@@ -2591,12 +2588,8 @@ bool CGameMovement::CheckPounceButton( void )
 
 			if ( tr.DidHit() ) // there is a wall
 			{
-				for (int i = 0; i < 3; i++)
-				{
-					mv->m_vecVelocity[i] = 0;
-				}
 				player->SetMoveType( MOVETYPE_NONE );
-				m_bIsInWallGrab = true;
+				player->m_bIsWallGrabbed = true;
 				return true;
 			}
 			else
@@ -2607,7 +2600,7 @@ bool CGameMovement::CheckPounceButton( void )
 		}
 		else 
 		{
-			m_bWallGrabPounce = false;
+			player->m_bWallGrabPounce = false;
 		}
 	}
 
@@ -4750,7 +4743,7 @@ void CGameMovement::PlayerMove( void )
 			}
 		}
 		
-		if ( m_bIsInWallGrab ) // in a wall grab
+		if ( player->m_bIsWallGrabbed ) // in a wall grab
 		{
 			if ( mv->m_nButtons & ~IN_POUNCE && mv->m_nOldButtons & IN_POUNCE ) // clear the flags
 			{
@@ -4761,10 +4754,10 @@ void CGameMovement::PlayerMove( void )
 			{
 				if ( mv->m_nButtons & IN_POUNCE )
 				{
-					m_bWallGrabPounce = true;
+					player->m_bWallGrabPounce = true;
 				}
 				player->SetMoveType( MOVETYPE_WALK );
-				m_bIsInWallGrab = false;
+				player->m_bIsWallGrabbed = false;
 			}
 		}
 	}

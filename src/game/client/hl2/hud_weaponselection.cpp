@@ -1447,8 +1447,67 @@ void CHudWeaponSelection::SelectWeaponSlot( int iSlot )
 		return;
 
 	
-	FastWeaponSwitch( iSlot );
-	return;
+	switch( hud_fastswitch.GetInt() )
+	{
+	case HUDTYPE_FASTSWITCH:
+	case HUDTYPE_CAROUSEL:
+		{
+			FastWeaponSwitch( iSlot );
+			return;
+		}
+		
+	case HUDTYPE_PLUS:
+		{
+			if ( !IsInSelectionMode() )
+			{
+				// open the weapon selection
+				OpenSelection();
+			}
+				
+			PlusTypeFastWeaponSwitch( iSlot );
+			ActivateWeaponHighlight( GetSelectedWeapon() );
+		}
+		break;
+
+	case HUDTYPE_BUCKETS:
+		{
+			int slotPos = 0;
+			C_BaseCombatWeapon *pActiveWeapon = GetSelectedWeapon();
+
+			// start later in the list
+			if ( IsInSelectionMode() && pActiveWeapon && pActiveWeapon->GetSlot() == iSlot )
+			{
+				slotPos = pActiveWeapon->GetPosition() + 1;
+			}
+
+			// find the weapon in this slot
+			pActiveWeapon = GetNextActivePos( iSlot, slotPos );
+			if ( !pActiveWeapon )
+			{
+				pActiveWeapon = GetNextActivePos( iSlot, 0 );
+			}
+			
+			if ( pActiveWeapon != NULL )
+			{
+				if ( !IsInSelectionMode() )
+				{
+					// open the weapon selection
+					OpenSelection();
+				}
+
+				// Mark the change
+				SetSelectedWeapon( pActiveWeapon );
+				SetSelectedSlideDir( 0 );
+			}
+		}
+
+	default:
+		{
+			// do nothing
+		}
+		break;
+	}
+
 
 	pPlayer->EmitSound( "Player.WeaponSelectionMoveSlot" );
 }

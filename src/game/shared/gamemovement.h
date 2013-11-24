@@ -76,9 +76,6 @@ protected:
 	Vector			m_vecRight;
 	Vector			m_vecUp;
 
-	bool			m_bWallGrabPounce;
-	bool			m_bIsInWallGrab;
-
 
 	// Does most of the player movement logic.
 	// Returns with origin, angles, and velocity modified in place.

@@ -983,7 +983,6 @@ void CHL2MP_Player::ChangeTeam( int iTeam )
 	else if ( iTeam != TEAM_SPECTATOR && GetTeamNumber() == TEAM_SPECTATOR) 
 	{
 		m_iHealth = 0;
-		bKill = true;
 	}
 
 	if ( iTeam == TEAM_SPECTATOR )
