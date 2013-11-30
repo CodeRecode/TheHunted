@@ -2566,6 +2566,8 @@ bool CGameMovement::CheckPounceButton( void )
 	if ( player->GetTeamNumber() == 3 ) // Team SWAT can't pounce
 		return false;
 
+	bool isGroundPounce = true;
+
 	// Check for wall grab or grab -> pounce, otherwise do nothing
  	if (player->GetGroundEntity() == NULL)
 	{
@@ -2601,6 +2603,7 @@ bool CGameMovement::CheckPounceButton( void )
 		else 
 		{
 			player->m_bWallGrabPounce = false;
+			isGroundPounce = false;
 		}
 	}
 
@@ -2628,6 +2631,10 @@ bool CGameMovement::CheckPounceButton( void )
 		Vector	vForward;
 		player->EyeVectors( &vForward, NULL, NULL );
 		mv->m_vecVelocity = vForward * flGroundFactor * flMul;
+		if ( isGroundPounce ) // make it arc a little more
+		{
+			mv->m_vecVelocity[2] += 75;
+		}
 	}
 	else
 	{
@@ -2635,6 +2642,10 @@ bool CGameMovement::CheckPounceButton( void )
 		player->EyeVectors( &vForward, NULL, NULL );
 		mv->m_vecVelocity[2] = 0;
 		mv->m_vecVelocity += vForward * flGroundFactor * flMul;
+		if ( isGroundPounce )
+		{
+			mv->m_vecVelocity[2] += 75;
+		}
 	}
 
 	FinishGravity();
@@ -4745,12 +4756,12 @@ void CGameMovement::PlayerMove( void )
 		
 		if ( player->m_bIsWallGrabbed ) // in a wall grab
 		{
-			if ( mv->m_nButtons & ~IN_POUNCE && mv->m_nOldButtons & IN_POUNCE ) // clear the flags
+			if ( !( mv->m_nButtons & IN_POUNCE ) && mv->m_nOldButtons & IN_POUNCE ) // Pounce button is not held down so clear the flags
 			{
 				mv->m_nOldButtons &= ~IN_JUMP;
 				mv->m_nOldButtons &= ~IN_POUNCE;
 			}
-			else if ( ( mv->m_nButtons & IN_POUNCE || mv->m_nButtons & IN_JUMP ) && mv->m_nOldButtons == 0 ) // get out of the grab
+			else if ( ( mv->m_nButtons & IN_POUNCE || mv->m_nButtons & IN_JUMP ) && !( mv->m_nOldButtons & IN_POUNCE ) ) // get out of the grab
 			{
 				if ( mv->m_nButtons & IN_POUNCE )
 				{
