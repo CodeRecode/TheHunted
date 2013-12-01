@@ -236,6 +236,35 @@ void CHL2MPMachineGun::ItemPostFrame( void )
 		m_nShotsFired = 0;
 	}
 
+	CHL2MP_Player *pPlayer = ToHL2MPPlayer( pOwner );
+	
+	if ( !bLowered && pPlayer->IsSprinting() )
+	{
+		bLowered = true;
+		SendWeaponAnim( ACT_VM_IDLE_LOWERED );
+		m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+		m_flNextPrimaryAttack = m_fLoweredReady;
+	}
+	else if ( bLowered && !pPlayer->IsSprinting() )
+	{
+		bLowered = false;
+		SendWeaponAnim( ACT_VM_IDLE );
+		m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+		m_flNextPrimaryAttack = m_fLoweredReady;
+	}
+ 
+	if ( bLowered )
+	{
+		if ( gpGlobals->curtime > m_fLoweredReady )
+		{
+			bLowered = true;
+			SendWeaponAnim( ACT_VM_IDLE_LOWERED );
+			m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+			m_flNextPrimaryAttack = m_fLoweredReady;
+		}
+		return;
+	}
+
 	BaseClass::ItemPostFrame();
 }
 

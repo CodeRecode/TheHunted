@@ -17,6 +17,8 @@ static ConVar sv_ladderautomountdot( "sv_ladderautomountdot", "0.4", FCVAR_REPLI
 
 static ConVar sv_ladder_useonly( "sv_ladder_useonly", "0", FCVAR_REPLICATED, "If set, ladders can only be mounted by pressing +USE" );
 
+static ConVar cl_viewbob_enabled	( "cl_viewbob_enabled", "1", 0, "Oscillation Toggle", true, 0, true, 1 );
+
 #define USE_DISMOUNT_SPEED 100
 
 //-----------------------------------------------------------------------------
@@ -1119,6 +1121,19 @@ bool CHL2GameMovement::LadderMove( void )
 	}
 
 	return true;
+}
+
+void CHL2GameMovement::WalkMove( void ) 
+{	
+	CHL2_Player *hl2Player = dynamic_cast<CHL2_Player*>( player );
+	if ( cl_viewbob_enabled.GetInt() == 1 && !engine->IsPaused() && hl2Player->IsSprinting() )
+	{
+		float xoffset = sin( gpGlobals->curtime * 10.0 ) * player->GetAbsVelocity().Length() * .05 / 100;
+		float yoffset = sin( 2 * gpGlobals->curtime * 10.0 ) * player->GetAbsVelocity().Length() * .05 / 100;
+		player->ViewPunch( QAngle( xoffset, yoffset, 0));	
+	}
+
+	BaseClass::WalkMove();
 }
 
 void CHL2GameMovement::SetGroundEntity( trace_t *pm )

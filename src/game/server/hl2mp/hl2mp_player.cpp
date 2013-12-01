@@ -217,7 +217,7 @@ void CHL2MP_Player::GiveLoadoutItems( void )
 
 	if ( GetTeamNumber() == TEAM_SWAT ) 
 	{
-		if ( primary == 1 ) 
+		if ( primary <= 1 ) 
 		{
 			GiveNamedItem( "weapon_smg1" );
 			CBasePlayer::GiveAmmo( 90, "SMG1" );
@@ -238,7 +238,7 @@ void CHL2MP_Player::GiveLoadoutItems( void )
 			CBasePlayer::GiveAmmo( 10, "XBowBolt" );
 		}
 
-		if ( secondary == 1 )
+		if ( secondary <= 1 )
 		{
 			GiveNamedItem( "weapon_pistol" );
 			CBasePlayer::GiveAmmo( 24, "Pistol" );

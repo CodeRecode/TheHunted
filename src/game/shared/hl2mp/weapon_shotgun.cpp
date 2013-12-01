@@ -390,21 +390,20 @@ void CWeaponShotgun::SecondaryAttack( void )
 //-----------------------------------------------------------------------------
 void CWeaponShotgun::ItemPostFrame( void )
 {
-	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
+	CHL2MP_Player *pOwner = ToHL2MPPlayer( GetOwner() );
 	if (!pOwner)
 	{
 		return;
 	}
 	
-	// TODO (davideo): See if we can stop this from going if the player is holding down the key but not sprinting
-	if ( !bLowered && (pOwner->m_nButtons & IN_SPEED ) )
+	if ( !bLowered && pOwner->IsSprinting() )
 	{
 		bLowered = true;
 		SendWeaponAnim( ACT_VM_IDLE_LOWERED );
 		m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
 		m_flNextPrimaryAttack = m_fLoweredReady;
 	}
-	else if ( bLowered && !(pOwner->m_nButtons & IN_SPEED ) )
+	else if ( bLowered && !pOwner->IsSprinting() )
 	{
 		bLowered = false;
 		SendWeaponAnim( ACT_VM_IDLE );

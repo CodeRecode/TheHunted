@@ -77,6 +77,8 @@ private:
 
 	void		SetLadder( CFuncLadder *ladder );
 	CFuncLadder *GetLadder();
+
+	void WalkMove();
 };
 
 

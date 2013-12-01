@@ -48,6 +48,7 @@ public:
 	static const	WeaponProficiencyInfo_t *GetDefaultProficiencyValues();
 
 	virtual void	ItemHolsterFrame( void );
+	virtual void	ItemPostFrame( void );
 
 protected:
 

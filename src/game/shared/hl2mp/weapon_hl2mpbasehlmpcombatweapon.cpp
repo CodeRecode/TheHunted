@@ -76,6 +76,42 @@ void CBaseHL2MPCombatWeapon::ItemHolsterFrame( void )
 	}
 }
 
+void CBaseHL2MPCombatWeapon::ItemPostFrame( void )
+{
+	CHL2MP_Player *pPlayer = ToHL2MPPlayer( GetOwner() );
+	if (!pPlayer)
+		return;
+	
+	if ( !bLowered && pPlayer->IsSprinting() )
+	{
+		bLowered = true;
+		SendWeaponAnim( ACT_VM_IDLE_LOWERED );
+		m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+		m_flNextPrimaryAttack = m_fLoweredReady;
+	}
+	else if ( bLowered && !pPlayer->IsSprinting() )
+	{
+		bLowered = false;
+		SendWeaponAnim( ACT_VM_IDLE );
+		m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+		m_flNextPrimaryAttack = m_fLoweredReady;
+	}
+ 
+	if ( bLowered )
+	{
+		if ( gpGlobals->curtime > m_fLoweredReady )
+		{
+			bLowered = true;
+			SendWeaponAnim( ACT_VM_IDLE_LOWERED );
+			m_fLoweredReady = gpGlobals->curtime + GetViewModelSequenceDuration();
+			m_flNextPrimaryAttack = m_fLoweredReady;
+		}
+		return;
+	}
+
+	BaseClass::ItemPostFrame();
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Drops the weapon into a lowered pose
 // Output : Returns true on success, false on failure.
