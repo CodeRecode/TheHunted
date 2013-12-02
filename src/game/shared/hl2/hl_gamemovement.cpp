@@ -1136,6 +1136,26 @@ void CHL2GameMovement::WalkMove( void )
 	BaseClass::WalkMove();
 }
 
+bool CHL2GameMovement::CheckPounceButton( void )
+{
+	CHL2_Player *hl2Player = dynamic_cast<CHL2_Player*>( player );
+
+	if ( hl2Player->m_HL2Local.m_flSuitPower < 33 )
+	{
+		BaseClass::CheckWallGrab();
+		return false;
+	}
+	else
+	{
+		bool pounced = BaseClass::CheckPounceButton();
+		if (pounced && !hl2Player->m_bIsWallGrabbed)
+		{
+			hl2Player->m_HL2Local.m_flSuitPower -= 33;
+		}
+		return pounced;
+	}
+}
+
 void CHL2GameMovement::SetGroundEntity( trace_t *pm )
 {
 	CBaseEntity *newGround = pm ? pm->m_pEnt : NULL;

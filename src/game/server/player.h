@@ -1057,6 +1057,9 @@ protected:
 
 	bool					m_bAllowInstantSpawn;
 
+	bool					m_bIsWallGrabbed;		// In a wall grab
+	bool					m_bWallGrabPounce;		// The pounce is a pounce off a wallgrab
+
 #if defined USES_ECON_ITEMS
 	// Wearables
 	CUtlVector<CHandle<CEconWearable > >	m_hMyWearables;
@@ -1079,9 +1082,6 @@ private:
 
 	int						m_nNumCrouches;			// Number of times we've crouched (for hinting)
 	bool					m_bDuckToggled;		// If true, the player is crouching via a toggle
-
-	bool					m_bIsWallGrabbed;		// In a wall grab
-	bool					m_bWallGrabPounce;		// The pounce is a pounce off a wallgrab
 
 public:
 	bool					GetToggledDuckState( void ) { return m_bDuckToggled; }

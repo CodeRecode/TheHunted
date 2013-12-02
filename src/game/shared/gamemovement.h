@@ -154,6 +154,7 @@ protected:
 	virtual bool	CheckJumpButton( void );	// Overridden by each game.
 
 	virtual bool	CheckPounceButton( void );
+	virtual void	CheckWallGrab( void );
 
 	// Dead player flying through air., e.g.
 	virtual void    FullTossMove( void );

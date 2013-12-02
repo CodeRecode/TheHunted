@@ -1967,6 +1967,10 @@ bool CHL2_Player::SuitPower_ShouldRecharge( void )
 	if( m_HL2Local.m_flSuitPower >= 100.0f )
 		return false; 
 
+	// Don't recharge while wallgrabbed
+	if (m_bIsWallGrabbed)
+		return false;
+
 	// Has the system been in a no-load state for long enough
 	// to begin recharging?
 	if( gpGlobals->curtime < m_flTimeAllSuitDevicesOff + SUITPOWER_BEGIN_RECHARGE_DELAY )
