@@ -121,6 +121,9 @@ public:
 	void CheckRestartGame();
 	void RestartGame();
 	
+	void StartRoundTimer( int roundTime );
+	int GetRoundRemainingTime();
+
 #ifndef CLIENT_DLL
 	virtual Vector VecItemRespawnSpot( CItem *pItem );
 	virtual QAngle VecItemRespawnAngles( CItem *pItem );
@@ -152,6 +155,8 @@ private:
 	
 	CNetworkVar( bool, m_bTeamPlayEnabled );
 	CNetworkVar( float, m_flGameStartTime );
+	CNetworkVar( float, m_flRoundStartTime );
+	CNetworkVar( int, m_iRoundLength );
 	CUtlVector<EHANDLE> m_hRespawnableItemsAndWeapons;
 	float m_tmNextPeriodicThink;
 	float m_flRestartGameTime;

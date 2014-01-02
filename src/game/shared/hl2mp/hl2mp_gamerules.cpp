@@ -61,8 +61,12 @@ BEGIN_NETWORK_TABLE_NOBASE( CHL2MPRules, DT_HL2MPRules )
 
 	#ifdef CLIENT_DLL
 		RecvPropBool( RECVINFO( m_bTeamPlayEnabled ) ),
+		RecvPropFloat( RECVINFO( m_flRoundStartTime ) ),
+		RecvPropInt( RECVINFO( m_iRoundLength ) ),
 	#else
 		SendPropBool( SENDINFO( m_bTeamPlayEnabled ) ),
+		SendPropFloat( SENDINFO( m_flRoundStartTime ) ),
+		SendPropInt( SENDINFO( m_iRoundLength ) ),
 	#endif
 
 END_NETWORK_TABLE()
@@ -208,6 +212,7 @@ CHL2MPRules::CHL2MPRules()
 	m_bChangelevelDone = false;
 
 #endif
+	m_flRoundStartTime = -1;
 }
 
 const CViewVectors* CHL2MPRules::GetViewVectors()const
@@ -288,7 +293,6 @@ void CHL2MPRules::PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &inf
 	BaseClass::PlayerKilled( pVictim, info );
 #endif
 }
-
 
 void CHL2MPRules::Think( void )
 {
@@ -861,6 +865,18 @@ float CHL2MPRules::GetMapRemainingTime()
 
 	return timeleft;
 }
+
+void CHL2MPRules::StartRoundTimer( int roundTime ) 
+{
+	m_flRoundStartTime = gpGlobals->curtime;
+	m_iRoundLength = 5 * 60; // five minutes
+}
+
+int CHL2MPRules::GetRoundRemainingTime() 
+{
+	return (m_flRoundStartTime >= 0) ? m_iRoundLength - (int)(gpGlobals->curtime - m_flRoundStartTime) : -1;
+}
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 

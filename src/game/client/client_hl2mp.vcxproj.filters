@@ -3514,6 +3514,9 @@
     <ClCompile Include="game_controls\mutationmenu.cpp">
       <Filter>Source Files\game_controls</Filter>
     </ClCompile>
+    <ClCompile Include="hl2\hud_roundtimer.cpp">
+      <Filter>Source Files\HL2 DLL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

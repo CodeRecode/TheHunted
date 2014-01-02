@@ -502,4 +502,18 @@
 		"visible"		"0"
 		"enabled"		"0"
 	}
+	
+	HudRoundtimer
+	{
+		"fieldName"		"HudRoundtimer"
+		"xpos"			"c-35"
+		"ypos"			"5"
+		"wide"			"69"
+		"tall"  		"27"
+		"visible"		"1"
+		"enabled"		"1"
+		"digit_xpos"	"10"
+		"digit_ypos"	"-4"
+		"PaintBackgroundType"	"2"
+	}
 }

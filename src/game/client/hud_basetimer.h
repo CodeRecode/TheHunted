@@ -23,7 +23,6 @@ class CHudBaseTimer : public CHudNumericDisplay
 public:
 	CHudBaseTimer(vgui::Panel *parent, const char *name);
 
-	void SetMinutes( int minutes );
 	void SetSeconds( int seconds );
 
 protected:
@@ -34,9 +33,8 @@ protected:
 	void SetToSecondaryColor();
 
 private:
-	void PaintTime(vgui::HFont font, int xpos, int ypos, int mins, int secs);
+	void PaintTime(vgui::HFont font, int xpos, int ypos, int secs);
 
-	int m_iMinutes;
 	int m_iSeconds;
 	wchar_t m_LabelText[32];
 
