@@ -755,6 +755,13 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	{
 		DeathNotice( pVictim, info );
 
+		color32 clrFade;
+		clrFade.r = 0;
+		clrFade.g = 0;
+		clrFade.b = 0;
+		clrFade.a = 255;
+		UTIL_ScreenFade(pVictim, clrFade, 4, 0, FFADE_OUT | FFADE_PURGE | FFADE_STAYOUT );
+
 		// Find the killer & the scorer
 		CBaseEntity *pInflictor = info.GetInflictor();
 		CBaseEntity *pKiller = info.GetAttacker();

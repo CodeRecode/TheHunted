@@ -697,8 +697,17 @@ void C_HL2MP_Player::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNea
 
 		if ( pRagdoll )
 		{
-			origin = pRagdoll->GetRagdollOrigin();
-			origin.z += VEC_DEAD_VIEWHEIGHT_SCALED( this ).z; // look over ragdoll, not through
+			//origin = pRagdoll->GetRagdollOrigin();
+			//origin.z += VEC_DEAD_VIEWHEIGHT_SCALED( this ).z; // look over ragdoll, not through
+
+			// pointer to the ragdoll
+			C_HL2MPRagdoll *pRagdoll = (C_HL2MPRagdoll*)m_hRagdoll.Get();
+
+			// gets its origin and angles
+			pRagdoll->GetAttachment( pRagdoll->LookupAttachment( "eyes" ), eyeOrigin, eyeAngles );
+			Vector vForward; 
+			AngleVectors( eyeAngles, &vForward );
+			return;
 		}
 
 		BaseClass::CalcView( eyeOrigin, eyeAngles, zNear, zFar, fov );
