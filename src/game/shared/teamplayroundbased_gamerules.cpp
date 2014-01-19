@@ -184,6 +184,9 @@ ConVar tf_arena_round_time( "tf_arena_round_time", "0", FCVAR_NOTIFY | FCVAR_REP
 ConVar tf_arena_max_streak( "tf_arena_max_streak", "3", FCVAR_NOTIFY | FCVAR_REPLICATED, "Teams will be scrambled if one team reaches this streak" );
 ConVar tf_arena_use_queue( "tf_arena_use_queue", "1", FCVAR_REPLICATED | FCVAR_NOTIFY, "Enables the spectator queue system for Arena." );
 
+ConVar th_warmupround_time( "th_warmupround_time", "30", FCVAR_REPLICATED | FCVAR_NOTIFY, "Length of time to wait for players in seconds" );
+ConVar th_round_time( "th_round_time", "300", FCVAR_REPLICATED | FCVAR_NOTIFY, "Length of round time in seconds" );
+
 ConVar mp_teams_unbalance_limit( "mp_teams_unbalance_limit", "1", FCVAR_REPLICATED | FCVAR_NOTIFY,
 					 "Teams are unbalanced when one team has this many more players than the other team. (0 disables check)",
 					 true, 0,	// min value
@@ -199,7 +202,7 @@ ConVar mp_forceautoteam( "mp_forceautoteam", "0", FCVAR_REPLICATED | FCVAR_NOTIF
 
 #ifdef GAME_DLL
 ConVar mp_showroundtransitions( "mp_showroundtransitions", "0", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Show gamestate round transitions." );
-ConVar mp_enableroundwaittime( "mp_enableroundwaittime", "1", FCVAR_REPLICATED, "Enable timers to wait between rounds." );
+ConVar mp_enableroundwaittime( "mp_enableroundwaittime", "0", FCVAR_REPLICATED, "Enable timers to wait between rounds." );
 ConVar mp_showcleanedupents( "mp_showcleanedupents", "0", FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY, "Show entities that are removed on round respawn." );
 ConVar mp_restartround( "mp_restartround", "0", FCVAR_GAMEDLL, "If non-zero, the current round will restart in the specified number of seconds" );	
 
@@ -399,6 +402,7 @@ CTeamplayRoundBasedRules::CTeamplayRoundBasedRules( void )
 	m_bAllowStalemateAtTimelimit = false;
 	m_bChangelevelAfterStalemate = false;
 	m_flRoundStartTime = 0;
+	m_flTHRoundStartTime = -1;
 	m_flNewThrottledAlertTime = 0;
 	m_flStartBalancingTeamsAt = 0;
 	m_bPrintedUnbalanceWarning = false;
@@ -1341,6 +1345,9 @@ void CTeamplayRoundBasedRules::State_Enter_STARTGAME( void )
 	m_flStateTransitionTime = gpGlobals->curtime;
 
 	m_bInitialSpawn = true;
+
+	m_flTHRoundStartTime = gpGlobals->curtime;
+	m_iTHWarmupRoundTime = th_warmupround_time.GetInt();
 }
 
 //-----------------------------------------------------------------------------
@@ -1348,7 +1355,7 @@ void CTeamplayRoundBasedRules::State_Enter_STARTGAME( void )
 //-----------------------------------------------------------------------------
 void CTeamplayRoundBasedRules::State_Think_STARTGAME()
 {
-	if( gpGlobals->curtime > m_flStateTransitionTime )
+	if( gpGlobals->curtime > m_flStateTransitionTime + m_iTHWarmupRoundTime)
 	{
 		if ( !IsInTraining() && !IsInItemTestingMode() )
 		{
@@ -1422,6 +1429,7 @@ void CTeamplayRoundBasedRules::State_Enter_PREROUND( void )
 	}
 
 	StopWatchModeThink();
+	m_iTHRoundTime = th_round_time.GetInt();
 }
 
 //-----------------------------------------------------------------------------
@@ -1429,7 +1437,7 @@ void CTeamplayRoundBasedRules::State_Enter_PREROUND( void )
 //-----------------------------------------------------------------------------
 void CTeamplayRoundBasedRules::State_Think_PREROUND( void )
 {
-	if( gpGlobals->curtime > m_flStateTransitionTime )
+	if( gpGlobals->curtime > m_flStateTransitionTime)
 	{
 		if ( IsInArenaMode() == true )
 		{
@@ -1480,6 +1488,8 @@ void CTeamplayRoundBasedRules::State_Enter_RND_RUNNING( void )
 	m_bPrevRoundWasWaitingForPlayers = false;
 
 	m_flNextBalanceTeamsTime = gpGlobals->curtime + 1.0f;
+	
+	m_flTHRoundStartTime = gpGlobals->curtime;
 }
 
 //-----------------------------------------------------------------------------

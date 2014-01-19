@@ -16,7 +16,7 @@
 #pragma once
 
 #include "gamerules.h"
-#include "teamplay_gamerules.h"
+#include "teamplayroundbased_gamerules.h"
 #include "gamevars_shared.h"
 
 #ifndef CLIENT_DLL
@@ -79,10 +79,10 @@ public:
 	Vector m_vCrouchTraceMax;	
 };
 
-class CHL2MPRules : public CTeamplayRules
+class CHL2MPRules : public CTeamplayRoundBasedRules
 {
 public:
-	DECLARE_CLASS( CHL2MPRules, CTeamplayRules );
+	DECLARE_CLASS( CHL2MPRules, CTeamplayRoundBasedRules );
 
 #ifdef CLIENT_DLL
 
@@ -120,8 +120,7 @@ public:
 	void CleanUpMap();
 	void CheckRestartGame();
 	void RestartGame();
-	
-	void StartRoundTimer( int roundTime );
+
 	int GetRoundRemainingTime();
 
 #ifndef CLIENT_DLL
@@ -155,8 +154,7 @@ private:
 	
 	CNetworkVar( bool, m_bTeamPlayEnabled );
 	CNetworkVar( float, m_flGameStartTime );
-	CNetworkVar( float, m_flRoundStartTime );
-	CNetworkVar( int, m_iRoundLength );
+	CNetworkVar( float, m_flTHRoundTimeLeft );
 	CUtlVector<EHANDLE> m_hRespawnableItemsAndWeapons;
 	float m_tmNextPeriodicThink;
 	float m_flRestartGameTime;

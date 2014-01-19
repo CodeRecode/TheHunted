@@ -55,7 +55,7 @@ DECLARE_HUDELEMENT( CHudRoundTimer );
 //-----------------------------------------------------------------------------
 CHudRoundTimer::CHudRoundTimer( const char *pElementName ) : CHudElement( pElementName ), CHudBaseTimer(NULL, "HudRoundTimer")
 {
-
+	SetHiddenBits( HIDEHUD_HEALTH | HIDEHUD_PLAYERDEAD );
 }
 
 //-----------------------------------------------------------------------------

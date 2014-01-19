@@ -61,12 +61,10 @@ BEGIN_NETWORK_TABLE_NOBASE( CHL2MPRules, DT_HL2MPRules )
 
 	#ifdef CLIENT_DLL
 		RecvPropBool( RECVINFO( m_bTeamPlayEnabled ) ),
-		RecvPropFloat( RECVINFO( m_flRoundStartTime ) ),
-		RecvPropInt( RECVINFO( m_iRoundLength ) ),
+		RecvPropFloat( RECVINFO( m_flTHRoundTimeLeft ) ),
 	#else
 		SendPropBool( SENDINFO( m_bTeamPlayEnabled ) ),
-		SendPropFloat( SENDINFO( m_flRoundStartTime ) ),
-		SendPropInt( SENDINFO( m_iRoundLength ) ),
+		SendPropFloat( SENDINFO( m_flTHRoundTimeLeft ) ),
 	#endif
 
 END_NETWORK_TABLE()
@@ -210,9 +208,9 @@ CHL2MPRules::CHL2MPRules()
 	m_bHeardAllPlayersReady = false;
 	m_bAwaitingReadyRestart = false;
 	m_bChangelevelDone = false;
+	m_flTHRoundTimeLeft = -1;
 
 #endif
-	m_flRoundStartTime = -1;
 }
 
 const CViewVectors* CHL2MPRules::GetViewVectors()const
@@ -300,6 +298,24 @@ void CHL2MPRules::Think( void )
 #ifndef CLIENT_DLL
 	
 	CGameRules::Think();
+	BaseClass::Think();
+
+	if (m_iRoundState == GR_STATE_STARTGAME)
+	{
+		m_flTHRoundTimeLeft = m_iTHWarmupRoundTime - (int)(gpGlobals->curtime - m_flTHRoundStartTime);
+	}
+	else if (m_iRoundState == GR_STATE_PREROUND)
+	{
+		m_flTHRoundTimeLeft = m_iTHRoundTime;
+	}
+	else if (m_iRoundState == GR_STATE_RND_RUNNING)
+	{
+		m_flTHRoundTimeLeft = m_iTHRoundTime - (int)(gpGlobals->curtime - m_flTHRoundStartTime);
+	}
+	else
+	{
+		m_flTHRoundTimeLeft = -1;
+	}
 
 	if ( g_fGameOver )   // someone else quit the game already
 	{
@@ -866,15 +882,9 @@ float CHL2MPRules::GetMapRemainingTime()
 	return timeleft;
 }
 
-void CHL2MPRules::StartRoundTimer( int roundTime ) 
-{
-	m_flRoundStartTime = gpGlobals->curtime;
-	m_iRoundLength = 5 * 60; // five minutes
-}
-
 int CHL2MPRules::GetRoundRemainingTime() 
 {
-	return (m_flRoundStartTime >= 0) ? m_iRoundLength - (int)(gpGlobals->curtime - m_flRoundStartTime) : -1;
+	return m_flTHRoundTimeLeft;
 }
 
 

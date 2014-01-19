@@ -508,6 +508,9 @@ protected:
 	int							m_nRoundsPlayed;
 	bool						m_bUseAddScoreAnim;
 
+	int							m_iTHRoundTime;
+	int							m_iTHWarmupRoundTime;
+
 	gamerules_roundstate_t		m_prevState;
 
 private:
@@ -573,6 +576,7 @@ public:
 
 	float	m_flStopWatchTotalTime;
 	int		m_iLastCapPointChanged;
+	float	m_flTHRoundStartTime;
 };
 
 // Utility function
